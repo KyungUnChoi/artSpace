@@ -1,0 +1,21 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - artspace-data:/app/data
+    environment:
+      PORT: "8080"
+      DB_PATH: /app/data
+      JWT_SECRET: ${JWT_SECRET:-art-space-secret-key}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-noreply@artspace.kr}
+    restart: unless-stopped
+
+volumes:
+  artspace-data:

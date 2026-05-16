@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="title.signup">ArtSpace (아지트) — Sign Up</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="lang-toggle-fixed">
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="ko">한</button>
+  </div>
+  <div class="card">
+    <h1 class="logo">ArtSpace (아지트)</h1>
+    <h2 data-i18n="signup.h2">Create Account</h2>
+
+    <form id="signup-form">
+      <div class="field">
+        <label for="username" data-i18n="signup.label.username">Username</label>
+        <input id="username" type="text" data-i18n-placeholder="signup.ph.username" placeholder="At least 3 characters" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="email" data-i18n="signup.label.email">Email</label>
+        <input id="email" type="email" data-i18n-placeholder="signup.ph.email" placeholder="you@example.com" autocomplete="email" required />
+      </div>
+      <div class="field">
+        <label for="phone" data-i18n="signup.label.phone">Phone Number</label>
+        <input id="phone" type="tel" data-i18n-placeholder="signup.ph.phone" placeholder="e.g. 010-1234-5678" autocomplete="tel" />
+      </div>
+      <div class="field">
+        <label for="password" data-i18n="signup.label.password">Password</label>
+        <input id="password" type="password" data-i18n-placeholder="signup.ph.password" placeholder="At least 6 characters" autocomplete="new-password" required />
+      </div>
+      <div class="field">
+        <label for="confirm" data-i18n="signup.label.confirm">Confirm Password</label>
+        <input id="confirm" type="password" data-i18n-placeholder="signup.ph.confirm" placeholder="Repeat password" autocomplete="new-password" required />
+      </div>
+      <p id="error-msg" class="error hidden"></p>
+      <button type="submit" class="btn-primary" data-i18n="signup.btn">Create Account</button>
+    </form>
+
+    <p class="switch-link"><span data-i18n="signup.switch1">Already have an account?</span> <a href="/login.html" data-i18n="signup.switch1.link">Sign in</a></p>
+    <p class="switch-link"><a href="/" data-i18n="signup.back">← Back to home</a></p>
+  </div>
+  <script type="module" src="/js/signup.js"></script>
+  <script type="module" src="/js/i18n.js"></script>
+</body>
+</html>

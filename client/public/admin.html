@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArtSpace (아지트) — Admin</title>
+  <link rel="stylesheet" href="/css/landing.css" />
+  <link rel="stylesheet" href="/css/calendar.css" />
+  <style>
+    .page-wrap { max-width: 1100px; margin: 0 auto; padding: 3rem 2.5rem; }
+
+    /* ── Header ─────────────────────────────────── */
+    .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .admin-header-left { display: flex; align-items: center; gap: 0.75rem; }
+    .admin-badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--dark); color: #fff; padding: 0.2rem 0.6rem; border-radius: 6px; }
+    .admin-title { font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 800; color: var(--dark); letter-spacing: -0.02em; }
+    .btn-new { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--teal); color: #fff; border: none; font-weight: 700; font-size: 0.88rem; padding: 0.6rem 1.25rem; border-radius: 50px; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+    .btn-new:hover { background: var(--teal-dark); }
+
+    /* ── Auth gate ──────────────────────────────── */
+    .auth-gate { background: var(--teal-light); border: 1.5px solid var(--teal); border-radius: 12px; padding: 2rem; text-align: center; color: var(--teal-dark); font-weight: 600; }
+    .auth-gate a { color: var(--teal-dark); font-weight: 700; }
+
+    /* ── Space table ────────────────────────────── */
+    .table-wrap { background: #fff; border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 2rem; }
+    .table-meta { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--border); }
+    .table-meta-title { font-size: 0.88rem; font-weight: 700; color: var(--dark); }
+    .table-meta-count { font-size: 0.8rem; color: var(--muted); }
+    .space-table { width: 100%; border-collapse: collapse; }
+    .space-table th { background: var(--surface); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 0.7rem 1rem; text-align: left; border-bottom: 1.5px solid var(--border); white-space: nowrap; }
+    .space-table td { padding: 0.85rem 1rem; font-size: 0.86rem; color: var(--mid); border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .space-table tbody tr:last-child td { border-bottom: none; }
+    .space-table tbody tr:hover td { background: var(--surface); }
+    .cell-preview { display: flex; align-items: center; gap: 0.6rem; }
+    .thumb-mini { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .cell-name { font-weight: 600; color: var(--dark); }
+    .tag-mini { font-size: 0.68rem; font-weight: 600; padding: 0.15rem 0.45rem; border-radius: 50px; background: var(--teal-light); color: var(--teal-dark); white-space: nowrap; }
+    .tags-cell { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .cell-rate { font-weight: 600; color: var(--teal-dark); white-space: nowrap; }
+    .cell-actions { display: flex; gap: 0.5rem; white-space: nowrap; }
+    .btn-edit, .btn-del { padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.78rem; font-weight: 700; border: 1.5px solid; cursor: pointer; transition: background 0.15s, color 0.15s; font-family: inherit; }
+    .btn-edit { border-color: var(--teal); color: var(--teal-dark); background: transparent; }
+    .btn-edit:hover { background: var(--teal); color: #fff; }
+    .btn-del { border-color: #E53E3E; color: #E53E3E; background: transparent; }
+    .btn-del:hover { background: #E53E3E; color: #fff; }
+    .table-overflow { overflow-x: auto; }
+
+    /* ── Form panel ─────────────────────────────── */
+    .form-panel { background: #fff; border: 1.5px solid var(--border); border-radius: 14px; padding: 2rem; }
+    .form-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
+    .form-panel-title { font-size: 1.05rem; font-weight: 700; color: var(--dark); }
+    .btn-cancel { background: none; border: 1.5px solid var(--border); color: var(--mid); font-size: 0.82rem; font-weight: 600; padding: 0.3rem 0.85rem; border-radius: 50px; cursor: pointer; font-family: inherit; transition: border-color 0.15s, color 0.15s; }
+    .btn-cancel:hover { border-color: var(--mid); color: var(--dark); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; }
+    .form-grid .full { grid-column: 1 / -1; }
+    .form-field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .form-field label { font-size: 0.8rem; font-weight: 600; color: var(--mid); }
+    .form-field input, .form-field select { border: 1.5px solid var(--border); border-radius: 8px; padding: 0.55rem 0.75rem; font-size: 0.88rem; font-family: inherit; color: var(--dark); background: #fff; outline: none; transition: border-color 0.15s; }
+    .form-field input:focus, .form-field select:focus { border-color: var(--teal); }
+    .types-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.1rem; }
+    .type-check { display: flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.7rem; border: 1.5px solid var(--border); border-radius: 50px; cursor: pointer; transition: border-color 0.15s, background 0.15s; user-select: none; }
+    .type-check input[type="checkbox"] { display: none; }
+    .type-check.checked { border-color: var(--teal); background: var(--teal-light); }
+    .type-check span { font-size: 0.78rem; font-weight: 600; color: var(--mid); }
+    .type-check.checked span { color: var(--teal-dark); }
+    .color-row { display: flex; align-items: center; gap: 0.75rem; }
+    .color-presets { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .color-swatch { width: 26px; height: 26px; border-radius: 6px; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s, transform 0.1s; }
+    .color-swatch:hover, .color-swatch.selected { border-color: var(--dark); transform: scale(1.1); }
+    .form-error { font-size: 0.82rem; color: #E53E3E; background: rgba(229,62,62,0.08); border-radius: 8px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; }
+    .form-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; align-items: center; }
+    .btn-save { background: var(--teal); color: #fff; border: none; font-weight: 700; font-size: 0.9rem; padding: 0.65rem 1.75rem; border-radius: 50px; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+    .btn-save:hover { background: var(--teal-dark); }
+    .btn-save:disabled { opacity: 0.55; cursor: not-allowed; }
+    .unavail-section { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.1rem; }
+    .unavail-list { display: flex; flex-direction: column; gap: 0.4rem; }
+    .unavail-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0.75rem; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); flex-wrap: wrap; }
+    .unavail-date-label { font-size: 0.82rem; font-weight: 700; color: var(--dark); white-space: nowrap; min-width: 92px; }
+    .unavail-hours { display: flex; flex-wrap: wrap; gap: 0.3rem; flex: 1; }
+    .unavail-hour-tag { font-size: 0.7rem; font-weight: 600; padding: 0.15rem 0.45rem; border-radius: 50px; background: rgba(229,62,62,0.1); color: #C53030; }
+    .btn-remove-date { font-size: 0.74rem; font-weight: 700; color: #E53E3E; border: 1.5px solid #E53E3E; background: transparent; border-radius: 50px; padding: 0.18rem 0.55rem; cursor: pointer; white-space: nowrap; font-family: inherit; transition: background 0.15s, color 0.15s; flex-shrink: 0; }
+    .btn-remove-date:hover { background: #E53E3E; color: #fff; }
+    .unavail-add { border: 1.5px dashed var(--border); border-radius: 10px; padding: 0.85rem 1rem; display: flex; flex-direction: column; gap: 0.65rem; }
+    .unavail-add-top { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .unavail-add-top label { font-size: 0.78rem; font-weight: 600; color: var(--mid); white-space: nowrap; }
+    .unavail-date-input { border: 1.5px solid var(--border); border-radius: 8px; padding: 0.4rem 0.6rem; font-size: 0.85rem; font-family: inherit; color: var(--dark); outline: none; transition: border-color 0.15s; }
+    .unavail-date-input:focus { border-color: var(--teal); }
+    .unavail-hours-label { font-size: 0.78rem; font-weight: 600; color: var(--mid); margin-bottom: 0.4rem; }
+    .unavail-hours-controls { display: flex; align-items: flex-start; gap: 0.75rem; flex-wrap: wrap; }
+    .hours-select { border: 1.5px solid var(--border); border-radius: 8px; padding: 0.3rem 0.5rem; font-size: 0.85rem; font-family: inherit; color: var(--dark); outline: none; transition: border-color 0.15s; min-width: 130px; }
+    .hours-select:focus { border-color: var(--teal); }
+    .hours-select:disabled { opacity: 0.4; cursor: not-allowed; }
+    .allday-check { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; user-select: none; font-size: 0.82rem; font-weight: 600; color: var(--mid); padding-top: 0.2rem; }
+    .allday-check input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--teal); cursor: pointer; }
+    .btn-block { align-self: flex-start; font-size: 0.8rem; font-weight: 700; background: transparent; border: 1.5px solid #E53E3E; color: #E53E3E; border-radius: 50px; padding: 0.32rem 0.9rem; cursor: pointer; font-family: inherit; transition: background 0.15s, color 0.15s; }
+    .btn-block:hover { background: #E53E3E; color: #fff; }
+    .unavail-empty { font-size: 0.82rem; color: var(--muted); font-style: italic; }
+    /* ── Admin calendar ─────────────────────────────── */
+    .form-section-divider { border: none; border-top: 1.5px solid var(--border); margin: 1.75rem 0 1.25rem; }
+    .admin-cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
+    .admin-cal-title { font-size: 0.88rem; font-weight: 700; color: var(--dark); }
+    .admin-cal-nav { display: flex; gap: 0.4rem; align-items: center; }
+    .admin-cal-week-label { font-size: 0.78rem; font-weight: 700; color: var(--dark); min-width: 148px; text-align: center; }
+    .btn-nav-sm { background: #fff; border: 1.5px solid var(--border); color: var(--mid); font-size: 0.75rem; font-weight: 700; padding: 0.22rem 0.6rem; border-radius: 50px; cursor: pointer; font-family: inherit; transition: border-color 0.15s, color 0.15s; }
+    .btn-nav-sm:hover { border-color: var(--teal); color: var(--teal-dark); }
+    .btn-nav-sm.today { background: var(--teal-light); border-color: var(--teal); color: var(--teal-dark); }
+
+    /* ── Booking requests ───────────────────────────── */
+    .admin-requests-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+    .req-card { border: 1.5px solid var(--border); border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 0.5rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+    .req-card-dot { width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; margin-top: 0.3rem; flex-shrink: 0; }
+    .req-card-body { flex: 1; min-width: 0; }
+    .req-card-name { font-size: 0.86rem; font-weight: 700; color: var(--dark); }
+    .req-card-email { font-size: 0.78rem; color: var(--mid); }
+    .req-card-time { font-size: 0.78rem; color: var(--mid); margin-top: 0.2rem; }
+    .req-card-msg { font-size: 0.76rem; color: var(--mid); font-style: italic; margin-top: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .req-card-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+    .btn-confirm { font-size: 0.75rem; font-weight: 700; background: transparent; border: 1.5px solid #16a34a; color: #16a34a; border-radius: 50px; padding: 0.22rem 0.65rem; cursor: pointer; font-family: inherit; transition: background 0.15s, color 0.15s; }
+    .btn-confirm:hover { background: #16a34a; color: #fff; }
+    .btn-decline { font-size: 0.75rem; font-weight: 700; background: transparent; border: 1.5px solid #E53E3E; color: #E53E3E; border-radius: 50px; padding: 0.22rem 0.65rem; cursor: pointer; font-family: inherit; transition: background 0.15s, color 0.15s; }
+    .btn-decline:hover { background: #E53E3E; color: #fff; }
+    .req-empty { font-size: 0.82rem; color: var(--muted); font-style: italic; padding: 0.25rem 0; }
+
+    @media (max-width: 700px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .full { grid-column: 1; }
+      .space-table th:nth-child(4), .space-table td:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-logo">
+      <span class="logo-text">ArtSpace (아지트)</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/" data-i18n="nav.home">Home</a></li>
+      <li><a href="/about.html" data-i18n="nav.about">About</a></li>
+      <li><a href="/pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+      <li><a href="/book-space.html" data-i18n="nav.bookSpace">Book Space</a></li>
+      <li><a href="/user-guide.html" data-i18n="nav.userGuide">User Guide</a></li>
+      <li><a href="/admin.html" data-i18n="nav.admin">Admin</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-auth">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ko">한</button>
+      </div>
+      <a href="/login.html" class="btn-login" id="loginBtn" data-i18n="nav.login">Login</a>
+      <div class="user-menu hidden" id="userMenu">
+        <button class="user-avatar-btn" id="userAvatarBtn" aria-haspopup="true" aria-expanded="false"></button>
+        <div class="user-dropdown hidden" id="userDropdown">
+          <div class="dropdown-info">
+            <div class="dropdown-avatar" id="dropdownAvatar"></div>
+            <div class="dropdown-details">
+              <span class="dropdown-name" id="dropdownName"></span>
+              <span class="dropdown-id" id="dropdownId"></span>
+            </div>
+          </div>
+          <hr class="dropdown-divider" />
+          <button class="dropdown-logout" id="logoutBtn" data-i18n="nav.signOut">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/" data-i18n="nav.home">Home</a>
+    <a href="/about.html" data-i18n="nav.about">About</a>
+    <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+    <a href="/book-space.html" data-i18n="nav.bookSpace">Book Space</a>
+    <a href="/user-guide.html" data-i18n="nav.userGuide">User Guide</a>
+    <a href="/admin.html" data-i18n="nav.admin">Admin</a>
+    <a href="/login.html" class="mobile-login" data-i18n="nav.login">Login</a>
+    <div class="mobile-lang">
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ko">한</button>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+
+    <!-- Auth gate -->
+    <div id="authGate" class="auth-gate hidden">
+      <p>You must be <a href="/login.html">logged in</a> to access the admin panel.</p>
+    </div>
+
+    <!-- Admin content -->
+    <div id="adminContent" class="hidden">
+
+      <div class="admin-header">
+        <div class="admin-header-left">
+          <span class="admin-badge">Admin</span>
+          <h1 class="admin-title">Space Management</h1>
+        </div>
+        <button class="btn-new" id="newSpaceBtn">&#43; New Space</button>
+      </div>
+
+      <!-- Space list table -->
+      <div class="table-wrap">
+        <div class="table-meta">
+          <span class="table-meta-title">Spaces</span>
+          <span class="table-meta-count" id="spaceCount">—</span>
+        </div>
+        <div class="table-overflow">
+          <table class="space-table">
+            <thead>
+              <tr>
+                <th>Space</th>
+                <th>Types</th>
+                <th>Capacity</th>
+                <th>Location</th>
+                <th>Rate / hr</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="spaceTableBody">
+              <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Create / Edit form -->
+      <div class="form-panel hidden" id="formPanel">
+        <div class="form-panel-header">
+          <span class="form-panel-title" id="formTitle">New Space</span>
+          <button class="btn-cancel" id="cancelBtn">Cancel</button>
+        </div>
+
+        <form id="spaceForm" novalidate>
+          <div class="form-grid">
+
+            <div class="form-field full">
+              <label for="f-name">Name *</label>
+              <input id="f-name" type="text" placeholder="e.g. Black Box Theatre" required />
+            </div>
+
+            <div class="form-field full">
+              <label>Types * (select at least one)</label>
+              <div class="types-grid" id="typesGrid">
+                <label class="type-check" data-type="Performance Hall"><input type="checkbox" value="Performance Hall"><span>Performance Hall</span></label>
+                <label class="type-check" data-type="Gallery"><input type="checkbox" value="Gallery"><span>Gallery</span></label>
+                <label class="type-check" data-type="Rehearsal"><input type="checkbox" value="Rehearsal"><span>Rehearsal</span></label>
+                <label class="type-check" data-type="Studio"><input type="checkbox" value="Studio"><span>Studio</span></label>
+                <label class="type-check" data-type="Dance"><input type="checkbox" value="Dance"><span>Dance</span></label>
+                <label class="type-check" data-type="Workshop"><input type="checkbox" value="Workshop"><span>Workshop</span></label>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="f-capacity">Capacity *</label>
+              <input id="f-capacity" type="number" min="1" placeholder="e.g. 120" required />
+            </div>
+
+            <div class="form-field">
+              <label for="f-rate">Hourly Rate (₩) *</label>
+              <input id="f-rate" type="number" min="0" placeholder="e.g. 80000" required />
+            </div>
+
+            <div class="form-field">
+              <label for="f-loc-en">Location (English) *</label>
+              <input id="f-loc-en" type="text" placeholder="e.g. Mapo-gu, Seoul" required />
+            </div>
+
+            <div class="form-field">
+              <label for="f-loc-ko">Location (Korean) *</label>
+              <input id="f-loc-ko" type="text" placeholder="e.g. 서울 마포구" required />
+            </div>
+
+            <div class="form-field">
+              <label for="f-contact-email">Contact Email</label>
+              <input id="f-contact-email" type="email" placeholder="e.g. venue@example.com" />
+            </div>
+
+            <div class="form-field">
+              <label for="f-contact-phone">Contact Phone</label>
+              <input id="f-contact-phone" type="text" placeholder="e.g. 02-1234-5678" />
+            </div>
+
+            <div class="form-field">
+              <label for="f-emoji">Emoji</label>
+              <select id="f-emoji">
+                <option value="🎭">🎭 Theatre</option>
+                <option value="🎬">🎬 Film</option>
+                <option value="🎪">🎪 Circus / Fair</option>
+                <option value="🎨">🎨 Visual Art</option>
+                <option value="🖼️">🖼️ Gallery</option>
+                <option value="🖌️">🖌️ Painting</option>
+                <option value="🎵">🎵 Music</option>
+                <option value="🎶">🎶 Songs</option>
+                <option value="🎸">🎸 Guitar</option>
+                <option value="🎹">🎹 Piano</option>
+                <option value="🥁">🥁 Drums</option>
+                <option value="🎺">🎺 Brass</option>
+                <option value="🎻">🎻 Strings</option>
+                <option value="🎤">🎤 Vocals</option>
+                <option value="💃">💃 Dance</option>
+                <option value="🕺">🕺 Dance</option>
+                <option value="🏛️">🏛️ Hall / Museum</option>
+                <option value="🏢">🏢 Building</option>
+                <option value="📸">📸 Photography</option>
+                <option value="🔨">🔨 Workshop</option>
+                <option value="🛠️">🛠️ Craft</option>
+                <option value="⚒️">⚒️ Maker</option>
+                <option value="🌟">🌟 Featured</option>
+                <option value="✨">✨ Special</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label>Thumb Color</label>
+              <div class="color-row">
+                <input id="f-color" type="color" value="#E6FAF9" style="width:38px;height:38px;border-radius:8px;border:1.5px solid var(--border);padding:2px;cursor:pointer;" />
+                <div class="color-presets" id="colorPresets">
+                  <div class="color-swatch" style="background:#E6FAF9;" data-color="#E6FAF9" title="Teal"></div>
+                  <div class="color-swatch" style="background:#F0EBFF;" data-color="#F0EBFF" title="Purple"></div>
+                  <div class="color-swatch" style="background:#FFF4E6;" data-color="#FFF4E6" title="Orange"></div>
+                  <div class="color-swatch" style="background:#FFF0F5;" data-color="#FFF0F5" title="Pink"></div>
+                  <div class="color-swatch" style="background:#E8F5E9;" data-color="#E8F5E9" title="Green"></div>
+                  <div class="color-swatch" style="background:#FFF8E1;" data-color="#FFF8E1" title="Yellow"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field full">
+              <label>Unavailability</label>
+              <div class="unavail-section">
+                <div class="unavail-list" id="unavailList">
+                  <span class="unavail-empty">No blocked times yet.</span>
+                </div>
+                <div class="unavail-add">
+                  <div class="unavail-add-top">
+                    <label for="unavailDate">Date</label>
+                    <input id="unavailDate" type="date" class="unavail-date-input" />
+                  </div>
+                  <div>
+                    <div class="unavail-hours-label">Hours to block</div>
+                    <div class="unavail-hours-controls">
+                      <select id="hoursSelect" class="hours-select" multiple size="7">
+                        <option value="9">09:00</option>
+                        <option value="10">10:00</option>
+                        <option value="11">11:00</option>
+                        <option value="12">12:00</option>
+                        <option value="13">13:00</option>
+                        <option value="14">14:00</option>
+                        <option value="15">15:00</option>
+                        <option value="16">16:00</option>
+                        <option value="17">17:00</option>
+                        <option value="18">18:00</option>
+                        <option value="19">19:00</option>
+                        <option value="20">20:00</option>
+                        <option value="21">21:00</option>
+                        <option value="22">22:00</option>
+                      </select>
+                      <label class="allday-check">
+                        <input type="checkbox" id="blockAllDay" />
+                        <span>Block all day</span>
+                      </label>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-block" id="addUnavailBtn">+ Block Hours</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div id="formError" class="form-error hidden"></div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-save" id="saveBtn">Save Space</button>
+            <button type="button" class="btn-cancel" id="cancelBtn2">Cancel</button>
+          </div>
+        </form>
+
+        <!-- Calendar preview + booking requests (edit mode only) -->
+        <div id="adminCalSection" class="hidden cal-compact">
+          <hr class="form-section-divider" />
+
+          <div class="admin-cal-header">
+            <span class="admin-cal-title">Availability Calendar</span>
+            <div class="admin-cal-nav">
+              <button type="button" class="btn-nav-sm" id="adminCalPrev">&#8592;</button>
+              <span class="admin-cal-week-label" id="adminCalLabel"></span>
+              <button type="button" class="btn-nav-sm" id="adminCalNext">&#8594;</button>
+              <button type="button" class="btn-nav-sm today" id="adminCalToday">Today</button>
+            </div>
+          </div>
+          <div class="cal-legend">
+            <div class="legend-item"><div class="legend-dot blocked"></div> Unavailable</div>
+            <div class="legend-item"><div class="legend-dot pending"></div> Pending request</div>
+          </div>
+          <div class="cal-wrap">
+            <div class="cal-grid" id="adminCalGrid"></div>
+          </div>
+
+          <div class="admin-requests-header">
+            <span class="admin-cal-title">Booking Requests</span>
+            <span class="table-meta-count" id="pendingCount"></span>
+          </div>
+          <div id="pendingRequestsList"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="/js/nav.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/i18n.js"></script>
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

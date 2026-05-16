@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArtSpace (아지트) — Check Availability</title>
+  <link rel="stylesheet" href="/css/landing.css" />
+  <link rel="stylesheet" href="/css/calendar.css" />
+  <style>
+    .page-wrap { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
+
+    /* ── Space header ───────────────────────────────── */
+    .space-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .space-thumb-lg { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; }
+    .space-header-info h1 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-weight: 800; color: var(--dark); letter-spacing: -0.02em; margin-bottom: 0.2rem; }
+    .space-header-meta { font-size: 0.85rem; color: var(--mid); display: flex; gap: 1rem; flex-wrap: wrap; }
+    .space-header-meta span { display: flex; align-items: center; gap: 0.3rem; }
+    .contact-info { display: flex; gap: 1.25rem; flex-wrap: wrap; font-size: 0.82rem; color: var(--mid); margin-top: 0.25rem; }
+    .contact-info a { color: var(--teal-dark); text-decoration: none; font-weight: 600; }
+    .contact-info a:hover { text-decoration: underline; }
+
+    /* ── Calendar nav ───────────────────────────────── */
+    .cal-nav { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .cal-nav-week { font-size: 0.95rem; font-weight: 700; color: var(--dark); flex: 1; }
+    .btn-nav { background: #fff; border: 1.5px solid var(--border); color: var(--mid); font-size: 0.82rem; font-weight: 700; padding: 0.38rem 0.9rem; border-radius: 50px; cursor: pointer; font-family: inherit; transition: border-color 0.15s, color 0.15s; }
+    .btn-nav:hover { border-color: var(--teal); color: var(--teal-dark); }
+    .btn-today { background: var(--teal-light); border-color: var(--teal); color: var(--teal-dark); }
+
+    /* ── Booking panel ──────────────────────────────── */
+    .booking-panel { background: #fff; border: 1.5px solid var(--teal); border-radius: 14px; padding: 1.75rem 2rem; }
+    .booking-panel-title { font-size: 1.05rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem; }
+    .booking-summary { background: var(--teal-light); color: var(--teal-dark); font-weight: 600; font-size: 0.9rem; padding: 0.65rem 1rem; border-radius: 8px; margin-bottom: 1.25rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    .booking-summary-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.75; }
+    .booking-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; }
+    .booking-form-grid .full { grid-column: 1 / -1; }
+    .bf { display: flex; flex-direction: column; gap: 0.3rem; }
+    .bf label { font-size: 0.78rem; font-weight: 600; color: var(--mid); }
+    .bf input, .bf textarea { border: 1.5px solid var(--border); border-radius: 8px; padding: 0.55rem 0.75rem; font-size: 0.88rem; font-family: inherit; color: var(--dark); outline: none; transition: border-color 0.15s; background: #fff; }
+    .bf input:focus, .bf textarea:focus { border-color: var(--teal); }
+    .bf textarea { resize: vertical; min-height: 80px; }
+    .booking-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; align-items: center; flex-wrap: wrap; }
+    .btn-send { background: var(--teal); color: #fff; border: none; font-weight: 700; font-size: 0.9rem; padding: 0.65rem 1.75rem; border-radius: 50px; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+    .btn-send:hover { background: var(--teal-dark); }
+    .btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-clear-sel { background: none; border: 1.5px solid var(--border); color: var(--mid); font-size: 0.82rem; font-weight: 600; padding: 0.38rem 0.9rem; border-radius: 50px; cursor: pointer; font-family: inherit; transition: border-color 0.15s; }
+    .btn-clear-sel:hover { border-color: var(--mid); }
+    .booking-error { color: #E53E3E; font-size: 0.82rem; background: rgba(229,62,62,0.08); border-radius: 8px; padding: 0.5rem 0.75rem; margin-top: 0.75rem; }
+    .booking-success { background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 1.5rem; color: #15803d; font-weight: 600; text-align: center; font-size: 0.95rem; }
+    .booking-success p { margin: 0.25rem 0 0; font-weight: 400; font-size: 0.85rem; color: #16a34a; }
+
+    @media (max-width: 640px) {
+      .booking-form-grid { grid-template-columns: 1fr; }
+      .booking-form-grid .full { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-logo"><span class="logo-text">ArtSpace (아지트)</span></a>
+    <ul class="nav-links">
+      <li><a href="/" data-i18n="nav.home">Home</a></li>
+      <li><a href="/about.html" data-i18n="nav.about">About</a></li>
+      <li><a href="/pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+      <li><a href="/book-space.html" data-i18n="nav.bookSpace">Book Space</a></li>
+      <li><a href="/user-guide.html" data-i18n="nav.userGuide">User Guide</a></li>
+      <li><a href="/admin.html" data-i18n="nav.admin">Admin</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-auth">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ko">한</button>
+      </div>
+      <a href="/login.html" class="btn-login" id="loginBtn" data-i18n="nav.login">Login</a>
+      <div class="user-menu hidden" id="userMenu">
+        <button class="user-avatar-btn" id="userAvatarBtn" aria-haspopup="true" aria-expanded="false"></button>
+        <div class="user-dropdown hidden" id="userDropdown">
+          <div class="dropdown-info">
+            <div class="dropdown-avatar" id="dropdownAvatar"></div>
+            <div class="dropdown-details">
+              <span class="dropdown-name" id="dropdownName"></span>
+              <span class="dropdown-id" id="dropdownId"></span>
+            </div>
+          </div>
+          <hr class="dropdown-divider" />
+          <button class="dropdown-logout" id="logoutBtn" data-i18n="nav.signOut">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/" data-i18n="nav.home">Home</a>
+    <a href="/about.html" data-i18n="nav.about">About</a>
+    <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+    <a href="/book-space.html" data-i18n="nav.bookSpace">Book Space</a>
+    <a href="/user-guide.html" data-i18n="nav.userGuide">User Guide</a>
+    <a href="/admin.html" data-i18n="nav.admin">Admin</a>
+    <a href="/login.html" class="mobile-login" data-i18n="nav.login">Login</a>
+    <div class="mobile-lang">
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ko">한</button>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+
+    <div id="spaceHeader" class="space-header">
+      <div style="color:var(--muted);font-size:0.9rem;">Loading…</div>
+    </div>
+
+    <div class="cal-nav">
+      <button class="btn-nav" id="prevWeek">&#8592; Prev</button>
+      <span class="cal-nav-week" id="weekLabel"></span>
+      <button class="btn-nav" id="nextWeek">Next &#8594;</button>
+      <button class="btn-nav btn-today" id="todayBtn">Today</button>
+    </div>
+
+    <p class="login-notice" id="loginNotice" style="display:none;">
+      Log in to make a booking. <a href="/login.html">Sign in</a> or <a href="/signup.html">create an account</a>.
+    </p>
+
+    <div id="bookingPanel" class="booking-panel hidden">
+      <div class="booking-panel-title">Send Booking Request</div>
+      <div class="booking-summary" id="bookingSummary"></div>
+      <form id="bookingForm" novalidate>
+        <div class="booking-form-grid">
+          <div class="bf">
+            <label for="req-name">Your Name *</label>
+            <input id="req-name" type="text" placeholder="e.g. Kim Minjun" required />
+          </div>
+          <div class="bf">
+            <label for="req-email">Your Email *</label>
+            <input id="req-email" type="email" placeholder="you@example.com" required />
+          </div>
+          <div class="bf full">
+            <label for="req-message">Message (optional)</label>
+            <textarea id="req-message" placeholder="Tell the venue about your booking needs…"></textarea>
+          </div>
+        </div>
+        <div id="bookingError" class="booking-error hidden"></div>
+        <div class="booking-actions">
+          <button type="submit" class="btn-send" id="sendBtn">Send Booking Request</button>
+          <button type="button" class="btn-clear-sel" id="clearSelBtn">Clear Selection</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="cal-legend">
+      <div class="legend-item"><div class="legend-dot blocked"></div> Unavailable</div>
+      <div class="legend-item"><div class="legend-dot pending"></div> Pending request</div>
+      <div class="legend-item"><div class="legend-dot past"></div> Past</div>
+      <div class="legend-item"><div class="legend-dot selected"></div> Your selection</div>
+    </div>
+
+    <div class="cal-wrap">
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/js/nav.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/i18n.js"></script>
+  <script type="module" src="/js/availability.js"></script>
+</body>
+</html>

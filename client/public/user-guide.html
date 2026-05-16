@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="title.guide">ArtSpace (아지트) — User Guide</title>
+  <link rel="stylesheet" href="/css/landing.css" />
+  <style>
+    .page-wrap { max-width: 800px; margin: 0 auto; padding: 4rem 2.5rem; }
+    .page-title { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 800; color: var(--dark); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .page-title span { color: var(--teal); }
+    .page-sub { font-size: 1.05rem; color: var(--mid); margin-bottom: 3rem; }
+    .guide-section { margin-bottom: 2.5rem; }
+    .guide-section h2 { font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem; }
+    .guide-step { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--teal); color: #fff; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.1rem; }
+    .step-body h3 { font-size: 0.95rem; font-weight: 700; color: var(--dark); margin-bottom: 0.25rem; }
+    .step-body p { font-size: 0.88rem; color: var(--mid); line-height: 1.7; margin: 0; }
+    .faq { border-top: 1px solid var(--border); padding-top: 2rem; margin-top: 1rem; }
+    .faq h2 { font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1.25rem; }
+    .faq-item { margin-bottom: 1.25rem; }
+    .faq-item h3 { font-size: 0.93rem; font-weight: 700; color: var(--dark); margin-bottom: 0.3rem; }
+    .faq-item p { font-size: 0.88rem; color: var(--mid); line-height: 1.7; margin: 0; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-logo">
+      <span class="logo-text">ArtSpace (아지트)</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/" data-i18n="nav.home">Home</a></li>
+      <li><a href="/about.html" data-i18n="nav.about">About</a></li>
+      <li><a href="/pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+      <li><a href="/book-space.html" data-i18n="nav.bookSpace">Book Space</a></li>
+      <li><a href="/user-guide.html" data-i18n="nav.userGuide">User Guide</a></li>
+      <li><a href="/admin.html" data-i18n="nav.admin">Admin</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-auth">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ko">한</button>
+      </div>
+      <a href="/login.html" class="btn-login" id="loginBtn" data-i18n="nav.login">Login</a>
+      <div class="user-menu hidden" id="userMenu">
+        <button class="user-avatar-btn" id="userAvatarBtn" aria-haspopup="true" aria-expanded="false"></button>
+        <div class="user-dropdown hidden" id="userDropdown">
+          <div class="dropdown-info">
+            <div class="dropdown-avatar" id="dropdownAvatar"></div>
+            <div class="dropdown-details">
+              <span class="dropdown-name" id="dropdownName"></span>
+              <span class="dropdown-id" id="dropdownId"></span>
+            </div>
+          </div>
+          <hr class="dropdown-divider" />
+          <button class="dropdown-logout" id="logoutBtn" data-i18n="nav.signOut">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/" data-i18n="nav.home">Home</a>
+    <a href="/about.html" data-i18n="nav.about">About</a>
+    <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+    <a href="/book-space.html" data-i18n="nav.bookSpace">Book Space</a>
+    <a href="/user-guide.html" data-i18n="nav.userGuide">User Guide</a>
+    <a href="/admin.html" data-i18n="nav.admin">Admin</a>
+    <a href="/login.html" class="mobile-login" data-i18n="nav.login">Login</a>
+    <div class="mobile-lang">
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ko">한</button>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+    <p class="hero-eyebrow" data-i18n="guide.eyebrow">Documentation</p>
+    <h1 class="page-title" data-i18n-html="guide.h1"><span>ArtSpace (아지트)</span> User Guide</h1>
+    <p class="page-sub" data-i18n="guide.sub">How to find, book, and manage art spaces on ArtSpace (아지트).</p>
+
+    <div class="guide-section">
+      <h2 data-i18n="guide.start.h2">🚀 Getting Started</h2>
+      <div class="guide-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.start.s1.h3">Create an Account</h3>
+          <p data-i18n-html="guide.start.s1.p">Click <strong>Login</strong> on the top-right, then go to Sign Up. Enter your username and password to create a free account.</p>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.start.s2.h3">Sign In</h3>
+          <p data-i18n="guide.start.s2.p">Once registered, sign in with your username and password. Your account badge will appear in the nav.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <h2 data-i18n="guide.find.h2">🔍 Finding a Space</h2>
+      <div class="guide-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.find.s1.h3">Browse Available Spaces</h3>
+          <p data-i18n-html="guide.find.s1.p">Go to <a href="/book-space.html">Book Space</a>. Use the filters to narrow by type — Rehearsal, Gallery, Performance Hall, Studio, or Workshop.</p>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.find.s2.h3">Check Availability</h3>
+          <p data-i18n-html="guide.find.s2.p">Click <strong>Check Availability</strong> on any space card to see the calendar and open time slots.</p>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.find.s3.h3">Select Your Date &amp; Time</h3>
+          <p data-i18n="guide.find.s3.p">Pick a date and time slot that works for you. You'll see the cost per hour or per session before confirming.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <h2 data-i18n="guide.book.h2">📋 Making a Booking</h2>
+      <div class="guide-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.book.s1.h3">Confirm Your Booking</h3>
+          <p data-i18n-html="guide.book.s1.p">Review the space details, date, time, and price. Click <strong>Confirm Booking</strong> to send your request.</p>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.book.s2.h3">Receive Confirmation</h3>
+          <p data-i18n="guide.book.s2.p">You'll receive a booking confirmation by email once the venue approves your request — usually within a few hours.</p>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.book.s3.h3">Manage Your Bookings</h3>
+          <p data-i18n="guide.book.s3.p">View all upcoming and past bookings from your account dashboard. Cancel or modify at least 24 hours in advance.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <h2 data-i18n="guide.venue.h2">🏛️ Listing Your Space (Venue Owners)</h2>
+      <div class="guide-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.venue.s1.h3">Create a Venue Account</h3>
+          <p data-i18n-html="guide.venue.s1.p">Sign up and select <strong>I own a space</strong>. Upgrade to a Venue plan to list your space on ArtSpace (아지트).</p>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.venue.s2.h3">Add Your Space</h3>
+          <p data-i18n="guide.venue.s2.p">Fill in your space details — name, location, capacity, type, and hourly rate. Add photos to attract more bookings.</p>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3 data-i18n="guide.venue.s3.h3">Manage Bookings &amp; Availability</h3>
+          <p data-i18n="guide.venue.s3.p">Set your availability calendar, approve or decline booking requests, and track payouts from your venue dashboard.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq">
+      <h2 data-i18n="guide.faq.h2">Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <h3 data-i18n="guide.faq.q1">Is it free to book a space?</h3>
+        <p data-i18n-html="guide.faq.a1">Creating an account is free. The Basic plan allows up to 3 bookings per month at no cost. See <a href="/pricing.html">Pricing</a> for more.</p>
+      </div>
+      <div class="faq-item">
+        <h3 data-i18n="guide.faq.q2">How do I cancel a booking?</h3>
+        <p data-i18n="guide.faq.a2">Go to your dashboard → My Bookings, find the booking, and select Cancel. Cancellations must be made at least 24 hours before the booking time.</p>
+      </div>
+      <div class="faq-item">
+        <h3 data-i18n="guide.faq.q3">Can I book a space for multiple days?</h3>
+        <p data-i18n="guide.faq.a3">Yes. When selecting availability, you can choose multiple consecutive time slots or submit a multi-day request directly to the venue.</p>
+      </div>
+      <div class="faq-item">
+        <h3 data-i18n="guide.faq.q4">I forgot my password. What do I do?</h3>
+        <p data-i18n-html="guide.faq.a4">On the login page, click <strong>Forgot password</strong> to receive a reset link by email.</p>
+      </div>
+      <div class="faq-item">
+        <h3 data-i18n="guide.faq.q5">How do I list my space?</h3>
+        <p data-i18n-html="guide.faq.a5">Sign up, upgrade to a Venue plan from <a href="/pricing.html">Pricing</a>, and follow the steps in the Listing section above.</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/nav.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/i18n.js"></script>
+</body>
+</html>

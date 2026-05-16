@@ -1,0 +1,40 @@
+/* ── Calendar grid ───────────────────────────────────────── */
+.cal-wrap { overflow-x: auto; border: 1.5px solid var(--border); border-radius: 14px; margin-bottom: 1.5rem; }
+.cal-grid { display: grid; grid-template-columns: 60px repeat(7, 1fr); min-width: 560px; }
+.cal-corner { background: var(--surface); border-bottom: 1.5px solid var(--border); border-right: 1px solid var(--border); position: sticky; top: 0; z-index: 2; }
+.cal-day-header { background: var(--surface); border-bottom: 1.5px solid var(--border); border-right: 1px solid var(--border); text-align: center; padding: 0.55rem 0.25rem; font-size: 0.75rem; font-weight: 700; color: var(--dark); position: sticky; top: 0; z-index: 2; user-select: none; }
+.cal-day-header.today { color: var(--teal-dark); background: var(--teal-light); }
+.cal-time-label { font-size: 0.68rem; color: var(--muted); text-align: right; padding: 0 0.5rem 0 0; border-right: 1px solid var(--border); display: flex; align-items: flex-start; padding-top: 0.3rem; background: var(--surface); height: 48px; box-sizing: border-box; user-select: none; }
+.cal-cell { height: 48px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); cursor: pointer; transition: background 0.08s; box-sizing: border-box; }
+.cal-cell:last-child { border-right: none; }
+.cal-cell:hover:not(.blocked):not(.past):not(.selected) { background: rgba(12,191,191,0.12); }
+.cal-cell.blocked { background: repeating-linear-gradient(-45deg,#fecaca,#fecaca 3px,#fff5f5 3px,#fff5f5 6px); cursor: not-allowed; }
+.cal-cell.past { background: var(--surface); cursor: default; opacity: 0.6; }
+.cal-cell.past:hover { background: var(--surface); }
+.cal-cell.selected { background: var(--teal) !important; }
+.cal-cell.pending { background: #fef3c7; cursor: default; }
+.cal-cell.pending:hover { background: #fef3c7; }
+.cal-cell.cal-row-last, .cal-time-label.cal-row-last { border-bottom: none; }
+
+/* ── Compact modifier (admin calendar) ─────────────────── */
+.cal-compact .cal-wrap { border-radius: 10px; margin-bottom: 1.25rem; }
+.cal-compact .cal-grid { grid-template-columns: 54px repeat(7, 1fr); min-width: 440px; }
+.cal-compact .cal-day-header { padding: 0.42rem 0.2rem; font-size: 0.7rem; }
+.cal-compact .cal-time-label { height: 34px; font-size: 0.62rem; padding: 0.2rem 0.4rem 0 0; }
+.cal-compact .cal-cell { height: 34px; cursor: default; }
+.cal-compact .cal-cell.blocked { cursor: default; }
+.cal-compact .cal-cell:hover:not(.blocked):not(.past):not(.pending) { background: transparent; }
+
+/* ── Legend ─────────────────────────────────────────────── */
+.cal-legend { display: flex; gap: 1.25rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--mid); }
+.legend-dot { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+.legend-dot.blocked { background: repeating-linear-gradient(-45deg,#fecaca,#fecaca 3px,#fff1f1 3px,#fff1f1 6px); border: 1px solid #fca5a5; }
+.legend-dot.selected { background: var(--teal); }
+.legend-dot.pending { background: #fef3c7; border: 1px solid #fcd34d; }
+.legend-dot.past { background: var(--surface); border: 1px solid var(--border); }
+
+/* ── Compact legend ─────────────────────────────────────── */
+.cal-compact .cal-legend { gap: 1rem; margin-bottom: 0.5rem; }
+.cal-compact .legend-item { font-size: 0.71rem; }
+.cal-compact .legend-dot { width: 12px; height: 12px; border-radius: 2px; }

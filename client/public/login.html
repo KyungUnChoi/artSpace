@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="title.login">ArtSpace (아지트) — Login</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="lang-toggle-fixed">
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="ko">한</button>
+  </div>
+  <div class="card">
+    <h1 class="logo">ArtSpace (아지트)</h1>
+    <h2 data-i18n="login.h2">Sign In</h2>
+
+    <form id="login-form">
+      <div class="field">
+        <label for="username" data-i18n="login.label.username">Username</label>
+        <input id="username" type="text" data-i18n-placeholder="login.ph.username" placeholder="Enter username" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="password" data-i18n="login.label.password">Password</label>
+        <input id="password" type="password" data-i18n-placeholder="login.ph.password" placeholder="Enter password" autocomplete="current-password" required />
+      </div>
+      <p id="error-msg" class="error hidden"></p>
+      <button type="submit" class="btn-primary" data-i18n="login.btn">Sign In</button>
+    </form>
+
+    <p class="switch-link"><span data-i18n="login.switch1">Don't have an account?</span> <a href="/signup.html" data-i18n="login.switch1.link">Sign up</a></p>
+    <p class="switch-link"><a href="/" data-i18n="login.back">← Back to home</a></p>
+  </div>
+  <script type="module" src="/js/login.js"></script>
+  <script type="module" src="/js/i18n.js"></script>
+</body>
+</html>

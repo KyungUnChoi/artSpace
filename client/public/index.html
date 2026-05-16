@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="title.index">ArtSpace (아지트) — Find &amp; Book Art Spaces</title>
+  <link rel="stylesheet" href="/css/landing.css" />
+</head>
+<body>
+
+  <!-- ── NAVIGATION ─────────────────────────────────────── -->
+  <nav class="nav">
+    <a href="/" class="nav-logo">
+      <span class="logo-text">ArtSpace (아지트)</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/" data-i18n="nav.home">Home</a></li>
+      <li><a href="/about.html" data-i18n="nav.about">About</a></li>
+      <li><a href="/pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+      <li><a href="/book-space.html" data-i18n="nav.bookSpace">Book Space</a></li>
+      <li><a href="/user-guide.html" data-i18n="nav.userGuide">User Guide</a></li>
+      <li><a href="/admin.html" data-i18n="nav.admin">Admin</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-auth">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ko">한</button>
+      </div>
+      <a href="/login.html" class="btn-login" id="loginBtn" data-i18n="nav.login">Login</a>
+      <div class="user-menu hidden" id="userMenu">
+        <button class="user-avatar-btn" id="userAvatarBtn" aria-haspopup="true" aria-expanded="false"></button>
+        <div class="user-dropdown hidden" id="userDropdown">
+          <div class="dropdown-info">
+            <div class="dropdown-avatar" id="dropdownAvatar"></div>
+            <div class="dropdown-details">
+              <span class="dropdown-name" id="dropdownName"></span>
+              <span class="dropdown-id" id="dropdownId"></span>
+            </div>
+          </div>
+          <hr class="dropdown-divider" />
+          <button class="dropdown-logout" id="logoutBtn" data-i18n="nav.signOut">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── MOBILE MENU ──────────────────────────────────────── -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/" data-i18n="nav.home">Home</a>
+    <a href="/about.html" data-i18n="nav.about">About</a>
+    <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+    <a href="/book-space.html" data-i18n="nav.bookSpace">Book Space</a>
+    <a href="/user-guide.html" data-i18n="nav.userGuide">User Guide</a>
+    <a href="/admin.html" data-i18n="nav.admin">Admin</a>
+    <a href="/login.html" class="mobile-login" data-i18n="nav.login">Login</a>
+    <div class="mobile-lang">
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ko">한</button>
+    </div>
+  </div>
+
+  <!-- ── HERO ───────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow" data-i18n="hero.eyebrow">공연장 · 갤러리 · 스튜디오</p>
+      <h1 class="hero-headline" data-i18n-html="hero.headline">
+        Find &amp; Book<br />
+        <span class="headline-accent">Art Spaces</span><br />
+        Across Korea
+      </h1>
+      <p class="hero-sub" data-i18n-html="hero.sub">
+        Discover rehearsal rooms, galleries, studios, and<br />
+        performance venues. Check availability and book in minutes.
+      </p>
+      <a href="/book-space.html" class="btn-start" id="startNowBtn" data-i18n="hero.cta">🔍 Find a Space</a>
+    </div>
+
+    <div class="hero-preview">
+      <div class="dashboard-card">
+        <div class="db-header">
+          <div class="db-dots">
+            <span class="db-dot red"></span>
+            <span class="db-dot yellow"></span>
+            <span class="db-dot green"></span>
+          </div>
+          <span class="db-title" data-i18n="db.title">ArtSpace (아지트) — Bookings</span>
+        </div>
+        <div class="db-stats">
+          <div class="db-stat">
+            <span class="db-num teal">124</span>
+            <span class="db-label" data-i18n="db.stat.spaces">Spaces</span>
+          </div>
+          <div class="db-stat">
+            <span class="db-num teal">48</span>
+            <span class="db-label" data-i18n="db.stat.venues">Venues</span>
+          </div>
+          <div class="db-stat">
+            <span class="db-num teal">1.2k</span>
+            <span class="db-label" data-i18n="db.stat.bookings">Bookings</span>
+          </div>
+          <div class="db-stat">
+            <span class="db-num teal">12</span>
+            <span class="db-label" data-i18n="db.stat.cities">Cities</span>
+          </div>
+        </div>
+        <div class="db-section-label" data-i18n="db.recent">Recent Bookings</div>
+        <div class="db-list">
+          <div class="db-item">
+            <span class="db-badge badge-teal">HALL</span>
+            <span class="db-name">Black Box Theatre</span>
+            <span class="db-city">Seoul</span>
+          </div>
+          <div class="db-item">
+            <span class="db-badge badge-purple">GALL</span>
+            <span class="db-name">Gallery White</span>
+            <span class="db-city">Busan</span>
+          </div>
+          <div class="db-item">
+            <span class="db-badge badge-orange">STUD</span>
+            <span class="db-name">Studio A — Hongdae</span>
+            <span class="db-city">Seoul</span>
+          </div>
+          <div class="db-item">
+            <span class="db-badge badge-pink">DANC</span>
+            <span class="db-name">Dance Studio B</span>
+            <span class="db-city">Daegu</span>
+          </div>
+        </div>
+        <div class="db-section-label" data-i18n="db.monthly">Monthly Bookings</div>
+        <div class="db-chart">
+          <div class="db-bar-wrap"><div class="db-bar" style="height:55%"></div><span>Jan</span></div>
+          <div class="db-bar-wrap"><div class="db-bar" style="height:70%"></div><span>Feb</span></div>
+          <div class="db-bar-wrap"><div class="db-bar" style="height:48%"></div><span>Mar</span></div>
+          <div class="db-bar-wrap"><div class="db-bar" style="height:85%"></div><span>Apr</span></div>
+          <div class="db-bar-wrap"><div class="db-bar" style="height:62%"></div><span>May</span></div>
+          <div class="db-bar-wrap"><div class="db-bar" style="height:78%"></div><span>Jun</span></div>
+          <div class="db-bar-wrap"><div class="db-bar highlight" style="height:92%"></div><span>Jul</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PARTNERS CAROUSEL ──────────────────────────────── -->
+  <section class="partners">
+    <h2 class="section-title" data-i18n="partners.title">Spaces Listed on ArtSpace (아지트)</h2>
+    <div class="carousel-wrap">
+      <button class="carousel-btn" id="prevBtn" aria-label="Previous">&#8592;</button>
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="carouselTrack"></div>
+      </div>
+      <button class="carousel-btn" id="nextBtn" aria-label="Next">&#8594;</button>
+    </div>
+  </section>
+
+  <!-- ── STATS BAR ───────────────────────────────────────── -->
+  <section class="stats">
+    <div class="stat-item">
+      <span class="stat-num">124</span>
+      <span class="stat-label" data-i18n="stat.spaces">Spaces Listed</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">48</span>
+      <span class="stat-label" data-i18n="stat.venues">Partner Venues</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">1,200+</span>
+      <span class="stat-label" data-i18n="stat.bookings">Bookings Made</span>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────────────── -->
+  <footer class="footer">
+    <span data-i18n="footer">© 2025 ArtSpace (아지트). All rights reserved.</span>
+  </footer>
+
+  <script type="module" src="/js/nav.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/landing.js"></script>
+  <script type="module" src="/js/i18n.js"></script>
+</body>
+</html>
