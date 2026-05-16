@@ -19,8 +19,10 @@ form.addEventListener('submit', async (e) => {
   errorMsg.classList.add('hidden');
 
   const username = (document.getElementById('username') as HTMLInputElement).value.trim();
+  const email    = (document.getElementById('email')    as HTMLInputElement).value.trim();
+  const phone    = (document.getElementById('phone')    as HTMLInputElement).value.trim();
   const password = (document.getElementById('password') as HTMLInputElement).value;
-  const confirm = (document.getElementById('confirm') as HTMLInputElement).value;
+  const confirm  = (document.getElementById('confirm')  as HTMLInputElement).value;
 
   if (password !== confirm) {
     showError('Passwords do not match');
@@ -34,7 +36,7 @@ form.addEventListener('submit', async (e) => {
     const res = await fetch(`${API}/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, email, phone, password }),
     });
     const data = await res.json() as { token?: string; user?: { id: string; username: string }; error?: string };
 

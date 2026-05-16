@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArtSpace (아지트) — Welcome</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    .welcome-card {
+      max-width: 480px;
+      margin: 6rem auto 2rem;
+      background: #fff;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .welcome-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--teal, #2ec4b6);
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+    }
+    .welcome-card h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1a202c;
+      margin: 0 0 0.4rem;
+    }
+    .welcome-card .account-id-row {
+      font-size: 0.78rem;
+      color: #718096;
+      margin-bottom: 2rem;
+    }
+    .welcome-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .welcome-links a {
+      display: block;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      background: #f7fafc;
+      color: #2d3748;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 1.5px solid #e2e8f0;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .welcome-links a:hover {
+      border-color: var(--teal, #2ec4b6);
+      background: #e6faf9;
+    }
+    .btn-logout {
+      background: none;
+      border: 1.5px solid #e2e8f0;
+      color: #718096;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.5rem 1.25rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-logout:hover {
+      border-color: #E53E3E;
+      color: #E53E3E;
+    }
+  </style>
+</head>
+<body>
+  <div class="lang-toggle-fixed">
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="ko">한</button>
+  </div>
+
+  <div class="welcome-card">
+    <p id="loading" style="color:#718096;">Loading…</p>
+
+    <div id="welcome-content" class="hidden">
+      <div class="welcome-avatar" id="avatar"></div>
+      <h1 id="welcome-heading"></h1>
+      <p class="account-id-row">Account ID: <code id="account-id"></code></p>
+
+      <div class="welcome-links">
+        <a href="/book-space.html">Browse Spaces</a>
+        <a href="/admin.html">Admin Dashboard</a>
+        <a href="/">← Back to Home</a>
+      </div>
+
+      <button class="btn-logout" id="logout-btn">Sign Out</button>
+    </div>
+  </div>
+
+  <script type="module" src="/js/welcome.js"></script>
+  <script type="module" src="/js/i18n.js"></script>
+</body>
+</html>
