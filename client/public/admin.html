@@ -185,7 +185,7 @@
 
     <!-- Auth gate -->
     <div id="authGate" class="auth-gate hidden">
-      <p>You must be <a href="/login.html">logged in</a> to access the admin panel.</p>
+      <p data-i18n-html="admin.auth.gate">You must be <a href="/login.html">logged in</a> to access the admin panel.</p>
     </div>
 
     <!-- Admin content -->
@@ -193,32 +193,32 @@
 
       <div class="admin-header">
         <div class="admin-header-left">
-          <span class="admin-badge">Admin</span>
-          <h1 class="admin-title">Space Management</h1>
+          <span class="admin-badge" data-i18n="admin.badge">Admin</span>
+          <h1 class="admin-title" data-i18n="admin.title">Space Management</h1>
         </div>
-        <button class="btn-new" id="newSpaceBtn">&#43; New Space</button>
+        <button class="btn-new" id="newSpaceBtn" data-i18n="admin.new">+ New Space</button>
       </div>
 
       <!-- Space list table -->
       <div class="table-wrap">
         <div class="table-meta">
-          <span class="table-meta-title">Spaces</span>
+          <span class="table-meta-title" data-i18n="admin.table.label">Spaces</span>
           <span class="table-meta-count" id="spaceCount">—</span>
         </div>
         <div class="table-overflow">
           <table class="space-table">
             <thead>
               <tr>
-                <th>Space</th>
-                <th>Types</th>
-                <th>Capacity</th>
-                <th>Location</th>
-                <th>Rate / hr</th>
+                <th data-i18n="admin.th.space">Space</th>
+                <th data-i18n="admin.th.types">Types</th>
+                <th data-i18n="admin.th.capacity">Capacity</th>
+                <th data-i18n="admin.th.location">Location</th>
+                <th data-i18n="admin.th.rate">Rate / hr</th>
                 <th></th>
               </tr>
             </thead>
             <tbody id="spaceTableBody">
-              <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">Loading…</td></tr>
+              <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;" data-i18n="admin.loading">Loading…</td></tr>
             </tbody>
           </table>
         </div>
@@ -227,62 +227,62 @@
       <!-- Create / Edit form -->
       <div class="form-panel hidden" id="formPanel">
         <div class="form-panel-header">
-          <span class="form-panel-title" id="formTitle">New Space</span>
-          <button class="btn-cancel" id="cancelBtn">Cancel</button>
+          <span class="form-panel-title" id="formTitle" data-i18n="admin.form.title.new">New Space</span>
+          <button class="btn-cancel" id="cancelBtn" data-i18n="admin.form.cancel">Cancel</button>
         </div>
 
         <form id="spaceForm" novalidate>
           <div class="form-grid">
 
             <div class="form-field full">
-              <label for="f-name">Name *</label>
-              <input id="f-name" type="text" placeholder="e.g. Black Box Theatre" required />
+              <label for="f-name" data-i18n="admin.form.name">Name *</label>
+              <input id="f-name" type="text" placeholder="e.g. Black Box Theatre" data-i18n-placeholder="admin.form.name.ph" required />
             </div>
 
             <div class="form-field full">
-              <label>Types * (select at least one)</label>
+              <label data-i18n="admin.form.types">Types * (select at least one)</label>
               <div class="types-grid" id="typesGrid">
-                <label class="type-check" data-type="Performance Hall"><input type="checkbox" value="Performance Hall"><span>Performance Hall</span></label>
-                <label class="type-check" data-type="Gallery"><input type="checkbox" value="Gallery"><span>Gallery</span></label>
-                <label class="type-check" data-type="Rehearsal"><input type="checkbox" value="Rehearsal"><span>Rehearsal</span></label>
-                <label class="type-check" data-type="Studio"><input type="checkbox" value="Studio"><span>Studio</span></label>
-                <label class="type-check" data-type="Dance"><input type="checkbox" value="Dance"><span>Dance</span></label>
-                <label class="type-check" data-type="Workshop"><input type="checkbox" value="Workshop"><span>Workshop</span></label>
+                <label class="type-check" data-type="Performance Hall"><input type="checkbox" value="Performance Hall"><span data-i18n="book.tag.perfhall">Performance Hall</span></label>
+                <label class="type-check" data-type="Gallery"><input type="checkbox" value="Gallery"><span data-i18n="book.tag.gallery">Gallery</span></label>
+                <label class="type-check" data-type="Rehearsal"><input type="checkbox" value="Rehearsal"><span data-i18n="book.tag.rehearsal">Rehearsal</span></label>
+                <label class="type-check" data-type="Studio"><input type="checkbox" value="Studio"><span data-i18n="book.tag.studio">Studio</span></label>
+                <label class="type-check" data-type="Dance"><input type="checkbox" value="Dance"><span data-i18n="book.tag.dance">Dance</span></label>
+                <label class="type-check" data-type="Workshop"><input type="checkbox" value="Workshop"><span data-i18n="book.tag.workshop">Workshop</span></label>
               </div>
             </div>
 
             <div class="form-field">
-              <label for="f-capacity">Capacity *</label>
-              <input id="f-capacity" type="number" min="1" placeholder="e.g. 120" required />
+              <label for="f-capacity" data-i18n="admin.form.capacity">Capacity *</label>
+              <input id="f-capacity" type="number" min="1" placeholder="e.g. 120" data-i18n-placeholder="admin.form.capacity.ph" required />
             </div>
 
             <div class="form-field">
-              <label for="f-rate">Hourly Rate (₩) *</label>
-              <input id="f-rate" type="number" min="0" placeholder="e.g. 80000" required />
+              <label for="f-rate" data-i18n="admin.form.rate">Hourly Rate (₩) *</label>
+              <input id="f-rate" type="number" min="0" placeholder="e.g. 80000" data-i18n-placeholder="admin.form.rate.ph" required />
             </div>
 
             <div class="form-field">
-              <label for="f-loc-en">Location (English) *</label>
-              <input id="f-loc-en" type="text" placeholder="e.g. Mapo-gu, Seoul" required />
+              <label for="f-loc-en" data-i18n="admin.form.loc.en">Location (English) *</label>
+              <input id="f-loc-en" type="text" placeholder="e.g. Mapo-gu, Seoul" data-i18n-placeholder="admin.form.loc.en.ph" required />
             </div>
 
             <div class="form-field">
-              <label for="f-loc-ko">Location (Korean) *</label>
-              <input id="f-loc-ko" type="text" placeholder="e.g. 서울 마포구" required />
+              <label for="f-loc-ko" data-i18n="admin.form.loc.ko">Location (Korean) *</label>
+              <input id="f-loc-ko" type="text" placeholder="e.g. 서울 마포구" data-i18n-placeholder="admin.form.loc.ko.ph" required />
             </div>
 
             <div class="form-field">
-              <label for="f-contact-email">Contact Email</label>
-              <input id="f-contact-email" type="email" placeholder="e.g. venue@example.com" />
+              <label for="f-contact-email" data-i18n="admin.form.email">Contact Email</label>
+              <input id="f-contact-email" type="email" placeholder="e.g. venue@example.com" data-i18n-placeholder="admin.form.email.ph" />
             </div>
 
             <div class="form-field">
-              <label for="f-contact-phone">Contact Phone</label>
-              <input id="f-contact-phone" type="text" placeholder="e.g. 02-1234-5678" />
+              <label for="f-contact-phone" data-i18n="admin.form.phone">Contact Phone</label>
+              <input id="f-contact-phone" type="text" placeholder="e.g. 02-1234-5678" data-i18n-placeholder="admin.form.phone.ph" />
             </div>
 
             <div class="form-field">
-              <label for="f-emoji">Emoji</label>
+              <label for="f-emoji" data-i18n="admin.form.emoji">Emoji</label>
               <select id="f-emoji">
                 <option value="🎭">🎭 Theatre</option>
                 <option value="🎬">🎬 Film</option>
@@ -312,7 +312,7 @@
             </div>
 
             <div class="form-field">
-              <label>Thumb Color</label>
+              <label data-i18n="admin.form.color">Thumb Color</label>
               <div class="color-row">
                 <input id="f-color" type="color" value="#E6FAF9" style="width:38px;height:38px;border-radius:8px;border:1.5px solid var(--border);padding:2px;cursor:pointer;" />
                 <div class="color-presets" id="colorPresets">
@@ -327,18 +327,18 @@
             </div>
 
             <div class="form-field full">
-              <label>Unavailability</label>
+              <label data-i18n="admin.form.unavail">Unavailability</label>
               <div class="unavail-section">
                 <div class="unavail-list" id="unavailList">
-                  <span class="unavail-empty">No blocked times yet.</span>
+                  <span class="unavail-empty" data-i18n="admin.unavail.empty">No blocked times yet.</span>
                 </div>
                 <div class="unavail-add">
                   <div class="unavail-add-top">
-                    <label for="unavailDate">Date</label>
+                    <label for="unavailDate" data-i18n="admin.unavail.date">Date</label>
                     <input id="unavailDate" type="date" class="unavail-date-input" />
                   </div>
                   <div>
-                    <div class="unavail-hours-label">Hours to block</div>
+                    <div class="unavail-hours-label" data-i18n="admin.unavail.hours">Hours to block</div>
                     <div class="unavail-hours-controls">
                       <select id="hoursSelect" class="hours-select" multiple size="7">
                         <option value="9">09:00</option>
@@ -358,11 +358,11 @@
                       </select>
                       <label class="allday-check">
                         <input type="checkbox" id="blockAllDay" />
-                        <span>Block all day</span>
+                        <span data-i18n="admin.unavail.allday">Block all day</span>
                       </label>
                     </div>
                   </div>
-                  <button type="button" class="btn-block" id="addUnavailBtn">+ Block Hours</button>
+                  <button type="button" class="btn-block" id="addUnavailBtn" data-i18n="admin.unavail.add">+ Block Hours</button>
                 </div>
               </div>
             </div>
@@ -372,8 +372,8 @@
           <div id="formError" class="form-error hidden"></div>
 
           <div class="form-actions">
-            <button type="submit" class="btn-save" id="saveBtn">Save Space</button>
-            <button type="button" class="btn-cancel" id="cancelBtn2">Cancel</button>
+            <button type="submit" class="btn-save" id="saveBtn" data-i18n="admin.form.save">Save Space</button>
+            <button type="button" class="btn-cancel" id="cancelBtn2" data-i18n="admin.form.cancel">Cancel</button>
           </div>
         </form>
 
@@ -382,24 +382,24 @@
           <hr class="form-section-divider" />
 
           <div class="admin-cal-header">
-            <span class="admin-cal-title">Availability Calendar</span>
+            <span class="admin-cal-title" data-i18n="admin.cal.title">Availability Calendar</span>
             <div class="admin-cal-nav">
               <button type="button" class="btn-nav-sm" id="adminCalPrev">&#8592;</button>
               <span class="admin-cal-week-label" id="adminCalLabel"></span>
               <button type="button" class="btn-nav-sm" id="adminCalNext">&#8594;</button>
-              <button type="button" class="btn-nav-sm today" id="adminCalToday">Today</button>
+              <button type="button" class="btn-nav-sm today" id="adminCalToday" data-i18n="admin.cal.today">Today</button>
             </div>
           </div>
           <div class="cal-legend">
-            <div class="legend-item"><div class="legend-dot blocked"></div> Unavailable</div>
-            <div class="legend-item"><div class="legend-dot pending"></div> Pending request</div>
+            <div class="legend-item"><div class="legend-dot blocked"></div> <span data-i18n="legend.blocked">Unavailable</span></div>
+            <div class="legend-item"><div class="legend-dot pending"></div> <span data-i18n="legend.pending">Pending request</span></div>
           </div>
           <div class="cal-wrap">
             <div class="cal-grid" id="adminCalGrid"></div>
           </div>
 
           <div class="admin-requests-header">
-            <span class="admin-cal-title">Booking Requests</span>
+            <span class="admin-cal-title" data-i18n="admin.req.title">Booking Requests</span>
             <span class="table-meta-count" id="pendingCount"></span>
           </div>
           <div id="pendingRequestsList"></div>

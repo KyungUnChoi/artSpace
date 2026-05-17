@@ -91,19 +91,19 @@
     <div id="welcome-content" class="hidden">
       <div class="welcome-avatar" id="avatar"></div>
       <h1 id="welcome-heading"></h1>
-      <p class="account-id-row">Account ID: <code id="account-id"></code></p>
+      <p class="account-id-row"><span data-i18n="welcome.account.id">Account ID:</span> <code id="account-id"></code></p>
 
       <div class="welcome-links">
-        <a href="/book-space.html">Browse Spaces</a>
-        <a href="/admin.html">Admin Dashboard</a>
-        <a href="/">← Back to Home</a>
+        <a href="/book-space.html" data-i18n="welcome.browse">Browse Spaces</a>
+        <a href="/admin.html" data-i18n="welcome.admin">Admin Dashboard</a>
+        <a href="/" data-i18n="welcome.back">← Back to Home</a>
       </div>
 
-      <button class="btn-logout" id="logout-btn">Sign Out</button>
+      <button class="btn-logout" id="logout-btn" data-i18n="welcome.signout">Sign Out</button>
     </div>
   </div>
 
-  <script type="module" src="/js/welcome.js"></script>
   <script type="module" src="/js/i18n.js"></script>
+  <script type="module" src="/js/welcome.js"></script>
 </body>
 </html>

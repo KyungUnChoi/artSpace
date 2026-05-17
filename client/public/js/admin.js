@@ -54,16 +54,21 @@ async function loadSpaces() {
     const res = await fetch(API);
     const data = await res.json();
     const spaces = data.spaces ?? [];
-    spaceCount.textContent = `${spaces.length} space${spaces.length !== 1 ? 's' : ''}`;
+    const lang = localStorage.getItem('lang') || 'en';
+    const n = spaces.length;
+    spaceCount.textContent = lang === 'ko' ? `공간 ${n}개` : `${n} space${n !== 1 ? 's' : ''}`;
     renderTable(spaces);
   } catch {
-    tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">Failed to load spaces.</td></tr>';
+    tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">${window.t('admin.err.load')}</td></tr>`;
   }
 }
 
+let cachedSpaces = [];
+
 function renderTable(spaces) {
+  cachedSpaces = spaces;
   if (spaces.length === 0) {
-    tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">No spaces yet. Click "+ New Space" to add one.</td></tr>';
+    tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">${window.t('admin.err.empty')}</td></tr>`;
     return;
   }
 
@@ -81,8 +86,8 @@ function renderTable(spaces) {
       <td class="cell-rate">₩${s.hourlyRate.toLocaleString()}</td>
       <td>
         <div class="cell-actions">
-          <button class="btn-edit" data-id="${s._id}">Edit</button>
-          <button class="btn-del" data-id="${s._id}">Delete</button>
+          <button class="btn-edit" data-id="${s._id}">${window.t('admin.btn.edit')}</button>
+          <button class="btn-del" data-id="${s._id}">${window.t('admin.btn.del')}</button>
         </div>
       </td>
     </tr>
@@ -102,7 +107,7 @@ function renderTable(spaces) {
 
 // ── Delete ───────────────────────────────────────────────
 async function deleteSpace(id) {
-  if (!confirm('Delete this space? This cannot be undone.')) return;
+  if (!confirm(window.t('admin.delete.confirm'))) return;
   try {
     const res = await fetch(`${API}/${id}`, {
       method: 'DELETE',
@@ -110,13 +115,13 @@ async function deleteSpace(id) {
     });
     if (!res.ok) {
       const d = await res.json();
-      alert(d.error ?? 'Delete failed');
+      alert(d.error ?? window.t('admin.err.delete'));
       return;
     }
     loadSpaces();
     if (editingId === id) closeForm();
   } catch {
-    alert('Delete failed. Please try again.');
+    alert(window.t('admin.err.delete'));
   }
 }
 
@@ -125,7 +130,7 @@ function openNewForm() {
   editingId = null;
   currentSpace = null;
   document.getElementById('adminCalSection').classList.add('hidden');
-  formTitle.textContent = 'New Space';
+  formTitle.textContent = window.t('admin.form.title.new');
   spaceForm.reset();
   clearTypeChecks();
   fEmoji.value = '🎭';
@@ -140,7 +145,8 @@ function openNewForm() {
 function openEditForm(space) {
   editingId = space._id;
   currentSpace = space;
-  formTitle.textContent = `Edit — ${space.name}`;
+  const editPrefix = (localStorage.getItem('lang') || 'en') === 'ko' ? '수정' : 'Edit';
+  formTitle.textContent = `${editPrefix} — ${space.name}`;
   fName.value = space.name;
   fCapacity.value = space.capacity;
   fRate.value = space.hourlyRate;
@@ -228,10 +234,11 @@ function renderPendingRequests(space) {
   const countEl  = document.getElementById('pendingCount');
   const pending  = adminPendingBookings.filter(b => b.status === 'pending');
 
-  countEl.textContent = `${pending.length} pending`;
+  const lang = localStorage.getItem('lang') || 'en';
+  countEl.textContent = lang === 'ko' ? `${pending.length}건 대기 중` : `${pending.length} pending`;
 
   if (pending.length === 0) {
-    list.innerHTML = '<div class="req-empty">No pending requests.</div>';
+    list.innerHTML = `<div class="req-empty">${window.t('admin.req.empty')}</div>`;
     return;
   }
 
@@ -240,17 +247,18 @@ function renderPendingRequests(space) {
     const startStr = `${String(sorted[0]).padStart(2,'0')}:00`;
     const endStr   = `${String(sorted[sorted.length-1]+1).padStart(2,'00')}:00`;
     const est      = (space.hourlyRate * b.hours.length).toLocaleString();
+    const hrLabel  = b.hours.length > 1 ? window.t('avail.hrs') : window.t('avail.hr');
     return `<div class="req-card">
       <div class="req-card-dot"></div>
       <div class="req-card-body">
         <div class="req-card-name">${escHtml(b.requesterName)}</div>
         <div class="req-card-email">${escHtml(b.requesterEmail)}</div>
-        <div class="req-card-time">${b.date} &nbsp;·&nbsp; ${startStr}–${endStr} (${b.hours.length}hr${b.hours.length>1?'s':''}) &nbsp;·&nbsp; ₩${est} est.</div>
+        <div class="req-card-time">${b.date} &nbsp;·&nbsp; ${startStr}–${endStr} (${b.hours.length}${hrLabel}) &nbsp;·&nbsp; ₩${est} est.</div>
         ${b.message ? `<div class="req-card-msg">"${escHtml(b.message)}"</div>` : ''}
       </div>
       <div class="req-card-actions">
-        <button class="btn-confirm" data-id="${b._id}" data-action="confirm">✓ Confirm</button>
-        <button class="btn-decline" data-id="${b._id}" data-action="decline">✕ Decline</button>
+        <button class="btn-confirm" data-id="${b._id}" data-action="confirm">${window.t('admin.btn.confirm')}</button>
+        <button class="btn-decline" data-id="${b._id}" data-action="decline">${window.t('admin.btn.decline')}</button>
       </div>
     </div>`;
   }).join('');
@@ -263,9 +271,9 @@ function renderPendingRequests(space) {
           method: 'POST',
           headers: { Authorization: `Bearer ${token()}` },
         });
-        if (!res.ok) { alert('Action failed'); return; }
+        if (!res.ok) { alert(window.t('admin.action.failed')); return; }
         await reloadCurrentSpace();
-      } catch { alert('Action failed'); }
+      } catch { alert(window.t('admin.action.failed')); }
       btn.disabled = false;
     });
   });
@@ -298,7 +306,7 @@ const unavailList = document.getElementById('unavailList');
 function renderUnavailList() {
   const dates = Object.keys(unavailability).sort();
   if (dates.length === 0) {
-    unavailList.innerHTML = '<span class="unavail-empty">No blocked times yet.</span>';
+    unavailList.innerHTML = `<span class="unavail-empty">${window.t('admin.unavail.empty')}</span>`;
     return;
   }
   unavailList.innerHTML = dates.map(date => {
@@ -307,7 +315,7 @@ function renderUnavailList() {
     return `<div class="unavail-row">
       <span class="unavail-date-label">${date}</span>
       <div class="unavail-hours">${tags}</div>
-      <button type="button" class="btn-remove-date" data-date="${date}">Remove</button>
+      <button type="button" class="btn-remove-date" data-date="${date}">${window.t('admin.btn.remove')}</button>
     </div>`;
   }).join('');
 
@@ -322,14 +330,14 @@ function renderUnavailList() {
 function addUnavailBlock() {
   const dateInput = document.getElementById('unavailDate');
   const date = dateInput.value;
-  if (!date) { alert('Please select a date.'); return; }
+  if (!date) { alert(window.t('admin.err.unavail.date')); return; }
 
   let hours;
   if (blockAllDay.checked) {
     hours = Array.from({ length: 14 }, (_, i) => i + 9); // 09–22
   } else {
     hours = [...hoursSelect.selectedOptions].map(o => Number(o.value));
-    if (hours.length === 0) { alert('Please select at least one hour to block.'); return; }
+    if (hours.length === 0) { alert(window.t('admin.err.unavail.hours')); return; }
   }
 
   const existing = unavailability[date] ?? [];
@@ -358,12 +366,12 @@ spaceForm.addEventListener('submit', async e => {
   clearError();
 
   const types = getSelectedTypes();
-  if (!fName.value.trim()) { showError('Name is required.'); fName.focus(); return; }
-  if (types.length === 0) { showError('Select at least one type.'); return; }
-  if (!fCapacity.value || Number(fCapacity.value) < 1) { showError('Capacity must be at least 1.'); fCapacity.focus(); return; }
-  if (!fRate.value || Number(fRate.value) < 0) { showError('Hourly rate must be 0 or more.'); fRate.focus(); return; }
-  if (!fLocEn.value.trim()) { showError('English location is required.'); fLocEn.focus(); return; }
-  if (!fLocKo.value.trim()) { showError('Korean location is required.'); fLocKo.focus(); return; }
+  if (!fName.value.trim()) { showError(window.t('admin.err.name')); fName.focus(); return; }
+  if (types.length === 0) { showError(window.t('admin.err.types')); return; }
+  if (!fCapacity.value || Number(fCapacity.value) < 1) { showError(window.t('admin.err.capacity')); fCapacity.focus(); return; }
+  if (!fRate.value || Number(fRate.value) < 0) { showError(window.t('admin.err.rate')); fRate.focus(); return; }
+  if (!fLocEn.value.trim()) { showError(window.t('admin.err.loc.en')); fLocEn.focus(); return; }
+  if (!fLocKo.value.trim()) { showError(window.t('admin.err.loc.ko')); fLocKo.focus(); return; }
 
   const payload = {
     name: fName.value.trim(),
@@ -380,7 +388,7 @@ spaceForm.addEventListener('submit', async e => {
   };
 
   saveBtn.disabled = true;
-  saveBtn.textContent = 'Saving…';
+  saveBtn.textContent = window.t('admin.saving');
 
   try {
     const url = editingId ? `${API}/${editingId}` : API;
@@ -393,17 +401,17 @@ spaceForm.addEventListener('submit', async e => {
 
     if (!res.ok) {
       const d = await res.json();
-      showError(d.error ?? 'Save failed');
+      showError(d.error ?? window.t('admin.err.save'));
       return;
     }
 
     closeForm();
     loadSpaces();
   } catch {
-    showError('Save failed. Please try again.');
+    showError(window.t('admin.err.save'));
   } finally {
     saveBtn.disabled = false;
-    saveBtn.textContent = 'Save Space';
+    saveBtn.textContent = window.t('admin.form.save');
   }
 });
 
@@ -449,6 +457,18 @@ document.getElementById('cancelBtn2').addEventListener('click', closeForm);
 function escHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+// ── Lang change ──────────────────────────────────────────
+document.addEventListener('langchange', () => {
+  if (cachedSpaces.length > 0) renderTable(cachedSpaces);
+  if (currentSpace) {
+    const editPrefix = (localStorage.getItem('lang') || 'en') === 'ko' ? '수정' : 'Edit';
+    formTitle.textContent = `${editPrefix} — ${currentSpace.name}`;
+    renderUnavailList();
+    renderPendingRequests(currentSpace);
+    renderAdminCalendar(currentSpace);
+  }
+});
 
 // ── Init ─────────────────────────────────────────────────
 if (checkAuth()) {

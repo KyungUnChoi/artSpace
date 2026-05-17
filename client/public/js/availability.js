@@ -38,7 +38,7 @@ function renderSpaceHeader() {
       <h1>${space.name}</h1>
       <div class="space-header-meta">
         <span>${loc}</span>
-        <span>Capacity: ${space.capacity}</span>
+        <span>${window.t('avail.label.capacity')}: ${space.capacity}</span>
         <span style="color:var(--teal-dark);font-weight:600;">${rate}</span>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.4rem;">${tags}</div>
@@ -124,14 +124,15 @@ function showBookingPanel() {
   const sorted = [...hours].sort((a, b) => a - b);
   const startStr = `${String(sorted[0]).padStart(2, '0')}:00`;
   const endStr = `${String(sorted[sorted.length - 1] + 1).padStart(2, '00')}:00`;
-  const duration = `${hours.length}hr${hours.length > 1 ? 's' : ''}`;
+  const hrKey = hours.length > 1 ? 'avail.hrs' : 'avail.hr';
+  const duration = `${hours.length}${window.t(hrKey)}`;
 
   const summary = document.getElementById('bookingSummary');
   summary.innerHTML = `
-    <div><div class="booking-summary-label">Date</div>${selDate}</div>
-    <div><div class="booking-summary-label">Time</div>${startStr} – ${endStr}</div>
-    <div><div class="booking-summary-label">Duration</div>${duration}</div>
-    <div><div class="booking-summary-label">Est. Cost</div>₩${(space.hourlyRate * hours.length).toLocaleString()}</div>
+    <div><div class="booking-summary-label">${window.t('avail.sum.date')}</div>${selDate}</div>
+    <div><div class="booking-summary-label">${window.t('avail.sum.time')}</div>${startStr} – ${endStr}</div>
+    <div><div class="booking-summary-label">${window.t('avail.sum.duration')}</div>${duration}</div>
+    <div><div class="booking-summary-label">${window.t('avail.sum.cost')}</div>₩${(space.hourlyRate * hours.length).toLocaleString()}</div>
   `;
 
   const panel = document.getElementById('bookingPanel');
@@ -176,17 +177,17 @@ async function submitBooking(e) {
   const email = document.getElementById('req-email').value.trim();
   const message = document.getElementById('req-message').value.trim();
 
-  if (!name) { showBookingError('Your name is required.'); return; }
+  if (!name) { showBookingError(window.t('avail.err.name')); return; }
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showBookingError('Please enter a valid email address.'); return;
+    showBookingError(window.t('avail.err.email')); return;
   }
 
   const hours = getSelHours();
-  if (hours.length === 0) { showBookingError('Please select a time slot on the calendar.'); return; }
+  if (hours.length === 0) { showBookingError(window.t('avail.err.slot')); return; }
 
   const sendBtn = document.getElementById('sendBtn');
   sendBtn.disabled = true;
-  sendBtn.textContent = 'Sending…';
+  sendBtn.textContent = window.t('avail.sending');
 
   try {
     const res = await fetch('/api/bookings', {
@@ -202,10 +203,14 @@ async function submitBooking(e) {
     }
 
     const panel = document.getElementById('bookingPanel');
+    const successBody = window.t('avail.success.body')
+      .replace('{name}', space.name)
+      .replace('{date}', selDate)
+      .replace('{email}', email);
     panel.innerHTML = `
       <div class="booking-success">
-        ✓ &nbsp;Booking request sent!
-        <p>Your request for <strong>${space.name}</strong> on <strong>${selDate}</strong> has been sent to the venue. They'll contact you at <strong>${email}</strong>.</p>
+        ${window.t('avail.success.heading')}
+        <p>${successBody}</p>
       </div>
     `;
 
@@ -219,7 +224,7 @@ async function submitBooking(e) {
     showBookingError('Failed to send request. Please try again.');
   } finally {
     const btn = document.getElementById('sendBtn');
-    if (btn) { btn.disabled = false; btn.textContent = 'Send Booking Request'; }
+    if (btn) { btn.disabled = false; btn.textContent = window.t('avail.btn.send'); }
   }
 }
 
@@ -283,5 +288,13 @@ async function init() {
   rewirePanel();
   prefillForm();
 }
+
+document.addEventListener('langchange', () => {
+  if (space) {
+    renderSpaceHeader();
+    renderCalendar();
+    if (selDate !== null && getSelHours().length > 0) showBookingPanel();
+  }
+});
 
 init();

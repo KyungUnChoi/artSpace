@@ -1,5 +1,6 @@
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DAY_NAMES_KO = ['일','월','화','수','목','금','토'];
 
 export const HOUR_START = 9;
 export const HOUR_END = 22;
@@ -19,6 +20,11 @@ export function getWeekStart(d) {
 export function formatWeekLabel(start) {
   const end = new Date(start);
   end.setDate(end.getDate() + 6);
+  if ((localStorage.getItem('lang') || 'en') === 'ko') {
+    if (start.getMonth() === end.getMonth())
+      return `${start.getFullYear()}년 ${start.getMonth()+1}월 ${start.getDate()}일 – ${end.getDate()}일`;
+    return `${start.getFullYear()}년 ${start.getMonth()+1}월 ${start.getDate()}일 – ${end.getMonth()+1}월 ${end.getDate()}일`;
+  }
   if (start.getMonth() === end.getMonth())
     return `${MONTHS[start.getMonth()]} ${start.getDate()} – ${end.getDate()}, ${start.getFullYear()}`;
   return `${MONTHS[start.getMonth()]} ${start.getDate()} – ${MONTHS[end.getMonth()]} ${end.getDate()}, ${start.getFullYear()}`;
@@ -61,10 +67,12 @@ export function renderCalendarGrid({ gridEl, labelEl, weekStart, space, pendingL
   corner.className = 'cal-corner';
   gridEl.appendChild(corner);
 
+  const isKo = (localStorage.getItem('lang') || 'en') === 'ko';
   days.forEach(day => {
     const el = document.createElement('div');
     el.className = 'cal-day-header' + (isoDate(day) === todayStr ? ' today' : '');
-    el.textContent = `${DAY_NAMES[day.getDay()]} ${day.getDate()}`;
+    const names = isKo ? DAY_NAMES_KO : DAY_NAMES;
+    el.textContent = `${names[day.getDay()]} ${day.getDate()}`;
     gridEl.appendChild(el);
   });
 

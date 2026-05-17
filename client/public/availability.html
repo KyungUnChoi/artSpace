@@ -112,47 +112,47 @@
     </div>
 
     <div class="cal-nav">
-      <button class="btn-nav" id="prevWeek">&#8592; Prev</button>
+      <button class="btn-nav" id="prevWeek" data-i18n="avail.prev">← Prev</button>
       <span class="cal-nav-week" id="weekLabel"></span>
-      <button class="btn-nav" id="nextWeek">Next &#8594;</button>
-      <button class="btn-nav btn-today" id="todayBtn">Today</button>
+      <button class="btn-nav" id="nextWeek" data-i18n="avail.next">Next →</button>
+      <button class="btn-nav btn-today" id="todayBtn" data-i18n="avail.today">Today</button>
     </div>
 
-    <p class="login-notice" id="loginNotice" style="display:none;">
+    <p class="login-notice" id="loginNotice" style="display:none;" data-i18n-html="avail.login">
       Log in to make a booking. <a href="/login.html">Sign in</a> or <a href="/signup.html">create an account</a>.
     </p>
 
     <div id="bookingPanel" class="booking-panel hidden">
-      <div class="booking-panel-title">Send Booking Request</div>
+      <div class="booking-panel-title" data-i18n="avail.panel.title">Send Booking Request</div>
       <div class="booking-summary" id="bookingSummary"></div>
       <form id="bookingForm" novalidate>
         <div class="booking-form-grid">
           <div class="bf">
-            <label for="req-name">Your Name *</label>
-            <input id="req-name" type="text" placeholder="e.g. Kim Minjun" required />
+            <label for="req-name" data-i18n="avail.label.name">Your Name *</label>
+            <input id="req-name" type="text" placeholder="e.g. Kim Minjun" data-i18n-placeholder="avail.ph.name" required />
           </div>
           <div class="bf">
-            <label for="req-email">Your Email *</label>
-            <input id="req-email" type="email" placeholder="you@example.com" required />
+            <label for="req-email" data-i18n="avail.label.email">Your Email *</label>
+            <input id="req-email" type="email" placeholder="you@example.com" data-i18n-placeholder="avail.ph.email" required />
           </div>
           <div class="bf full">
-            <label for="req-message">Message (optional)</label>
-            <textarea id="req-message" placeholder="Tell the venue about your booking needs…"></textarea>
+            <label for="req-message" data-i18n="avail.label.message">Message (optional)</label>
+            <textarea id="req-message" placeholder="Tell the venue about your booking needs…" data-i18n-placeholder="avail.ph.message"></textarea>
           </div>
         </div>
         <div id="bookingError" class="booking-error hidden"></div>
         <div class="booking-actions">
-          <button type="submit" class="btn-send" id="sendBtn">Send Booking Request</button>
-          <button type="button" class="btn-clear-sel" id="clearSelBtn">Clear Selection</button>
+          <button type="submit" class="btn-send" id="sendBtn" data-i18n="avail.btn.send">Send Booking Request</button>
+          <button type="button" class="btn-clear-sel" id="clearSelBtn" data-i18n="avail.btn.clear">Clear Selection</button>
         </div>
       </form>
     </div>
 
     <div class="cal-legend">
-      <div class="legend-item"><div class="legend-dot blocked"></div> Unavailable</div>
-      <div class="legend-item"><div class="legend-dot pending"></div> Pending request</div>
-      <div class="legend-item"><div class="legend-dot past"></div> Past</div>
-      <div class="legend-item"><div class="legend-dot selected"></div> Your selection</div>
+      <div class="legend-item"><div class="legend-dot blocked"></div> <span data-i18n="legend.blocked">Unavailable</span></div>
+      <div class="legend-item"><div class="legend-dot pending"></div> <span data-i18n="legend.pending">Pending request</span></div>
+      <div class="legend-item"><div class="legend-dot past"></div> <span data-i18n="legend.past">Past</span></div>
+      <div class="legend-item"><div class="legend-dot selected"></div> <span data-i18n="legend.selected">Your selection</span></div>
     </div>
 
     <div class="cal-wrap">
