@@ -16,6 +16,8 @@ function buildCards() {
     currentPartners.forEach((p) => {
         const card = document.createElement('div');
         card.className = 'partner-card';
+        card.style.cursor = 'pointer';
+        card.title = p.name;
         if (p.image) {
             const img = document.createElement('img');
             img.className = 'partner-img';
@@ -34,6 +36,9 @@ function buildCards() {
         label.className = 'partner-name';
         label.textContent = p.name;
         card.appendChild(label);
+        card.addEventListener('click', () => {
+            window.location.href = `/book-space.html?open=${encodeURIComponent(p.id)}`;
+        });
         track.appendChild(card);
     });
 }
@@ -120,6 +125,7 @@ async function loadData() {
             const data = await spacesRes.json();
             if (data.spaces?.length) {
                 currentPartners = data.spaces.map((s) => ({
+                    id: s._id,
                     name: s.name,
                     initials: s.emoji || s.name.substring(0, 3).toUpperCase(),
                     color: s.thumbColor || '#0CBFBF',

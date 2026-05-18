@@ -208,6 +208,7 @@ const translations = {
     'legend.selected': 'Your selection',
 
     // availability page
+    'avail.back': 'Back',
     'avail.prev': '← Prev',
     'avail.next': 'Next →',
     'avail.today': 'Today',
@@ -518,6 +519,7 @@ const translations = {
     'legend.selected': '선택한 시간',
 
     // availability page
+    'avail.back': '뒤로',
     'avail.prev': '← 이전',
     'avail.next': '다음 →',
     'avail.today': '오늘',

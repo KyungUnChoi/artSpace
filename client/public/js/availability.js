@@ -23,25 +23,32 @@ function getSelHours() {
 // ── Space header ──────────────────────────────────────────
 function renderSpaceHeader() {
   const el = document.getElementById('spaceHeader');
-  const tags = (space.types ?? []).map(t => `<span class="space-tag" style="font-size:0.72rem;">${t}</span>`).join('');
   const lang = localStorage.getItem('lang') || 'en';
   const loc = lang === 'ko' ? space.locationKo : space.locationEn;
-  const rate = `₩${space.hourlyRate.toLocaleString()} / hr`;
+
+  const locLabel  = lang === 'ko' ? '위치' : 'Location';
+  const capLabel  = lang === 'ko' ? '수용 인원' : 'Capacity';
+  const rateLabel = lang === 'ko' ? '시간당' : 'Per hour';
+  const rate      = `₩${space.hourlyRate.toLocaleString()}`;
+
+  const tags = (space.types ?? []).map(t => `<span class="space-tag" style="font-size:0.72rem;">${t}</span>`).join('');
+
   const contact = [
-    space.contactEmail ? `<a href="mailto:${space.contactEmail}">${space.contactEmail}</a>` : '',
-    space.contactPhone ? `<span>${space.contactPhone}</span>` : '',
-  ].filter(Boolean).join(' &nbsp;·&nbsp; ');
+    space.contactEmail ? `<a href="mailto:${space.contactEmail}">✉ ${space.contactEmail}</a>` : '',
+    space.contactPhone ? `<span>📞 ${space.contactPhone}</span>` : '',
+  ].filter(Boolean).join('');
 
   el.innerHTML = `
     <div class="space-thumb-lg" style="background:${space.thumbColor};">${space.emoji}</div>
     <div class="space-header-info">
       <h1>${space.name}</h1>
-      <div class="space-header-meta">
-        <span>${loc}</span>
-        <span>${window.t('avail.label.capacity')}: ${space.capacity}</span>
-        <span style="color:var(--teal-dark);font-weight:600;">${rate}</span>
+      ${space.description ? `<div class="space-info-desc">${space.description}</div>` : ''}
+      <div class="space-info-chips">
+        <span class="info-chip">📍 ${loc}</span>
+        <span class="info-chip">👥 ${capLabel}: ${space.capacity}</span>
+        <span class="info-chip rate">₩ ${rate} <span style="font-weight:400;opacity:0.75;">/ ${rateLabel}</span></span>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.4rem;">${tags}</div>
+      ${tags ? `<div class="space-info-tags">${tags}</div>` : ''}
       ${contact ? `<div class="contact-info">${contact}</div>` : ''}
     </div>
   `;
@@ -261,6 +268,10 @@ document.getElementById('todayBtn').addEventListener('click', () => {
 async function init() {
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
+  if (id) {
+    const backBtn = document.getElementById('backBtn');
+    if (backBtn) backBtn.href = `/book-space.html?open=${encodeURIComponent(id)}`;
+  }
   if (!id) {
     document.getElementById('spaceHeader').innerHTML = '<p style="color:var(--muted);">No space selected. <a href="/book-space.html">Browse spaces</a>.</p>';
     return;

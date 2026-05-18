@@ -9,13 +9,21 @@
   <style>
     .page-wrap { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
 
-    /* ── Space header ───────────────────────────────── */
-    .space-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-    .space-thumb-lg { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; }
+    /* ── Back button ────────────────────────────────── */
+    .btn-back { display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 1.25rem; padding: 0.38rem 0.9rem; border-radius: 50px; border: 1.5px solid var(--border); background: #fff; font-size: 0.83rem; font-weight: 600; color: var(--mid); text-decoration: none; transition: border-color 0.15s, color 0.15s; }
+    .btn-back:hover { border-color: var(--teal); color: var(--teal-dark); }
+
+    /* ── Space info card ────────────────────────────── */
+    .space-header { background: #fff; border: 1.5px solid var(--border); border-radius: 16px; padding: 1.5rem 1.75rem; display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .space-thumb-lg { width: 80px; height: 80px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; flex-shrink: 0; align-self: flex-start; }
+    .space-header-info { flex: 1; min-width: 0; }
     .space-header-info h1 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-weight: 800; color: var(--dark); letter-spacing: -0.02em; margin-bottom: 0.2rem; }
-    .space-header-meta { font-size: 0.85rem; color: var(--mid); display: flex; gap: 1rem; flex-wrap: wrap; }
-    .space-header-meta span { display: flex; align-items: center; gap: 0.3rem; }
-    .contact-info { display: flex; gap: 1.25rem; flex-wrap: wrap; font-size: 0.82rem; color: var(--mid); margin-top: 0.25rem; }
+    .space-info-desc { font-size: 0.88rem; color: var(--mid); margin-bottom: 0.85rem; line-height: 1.5; }
+    .space-info-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.8rem; }
+    .info-chip { display: inline-flex; align-items: center; gap: 0.3rem; background: var(--bg); border: 1px solid var(--border); border-radius: 50px; padding: 0.28rem 0.75rem; font-size: 0.81rem; color: var(--dark); font-weight: 500; }
+    .info-chip.rate { color: var(--teal-dark); font-weight: 700; background: var(--teal-light); border-color: rgba(12,191,191,0.35); }
+    .space-info-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.75rem; }
+    .contact-info { display: flex; gap: 1.25rem; flex-wrap: wrap; font-size: 0.82rem; color: var(--mid); padding-top: 0.6rem; border-top: 1px solid var(--border); }
     .contact-info a { color: var(--teal-dark); text-decoration: none; font-weight: 600; }
     .contact-info a:hover { text-decoration: underline; }
 
@@ -106,6 +114,8 @@
   </div>
 
   <div class="page-wrap">
+
+    <a class="btn-back" id="backBtn" href="/book-space.html">&#8592; <span data-i18n="avail.back">Back</span></a>
 
     <div id="spaceHeader" class="space-header">
       <div style="color:var(--muted);font-size:0.9rem;">Loading…</div>

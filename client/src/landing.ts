@@ -1,6 +1,7 @@
 export {};
 
 interface Partner {
+  id: string;
   name: string;
   initials: string;
   color: string;
@@ -45,6 +46,8 @@ function buildCards() {
   currentPartners.forEach((p) => {
     const card = document.createElement('div');
     card.className = 'partner-card';
+    card.style.cursor = 'pointer';
+    card.title = p.name;
 
     if (p.image) {
       const img = document.createElement('img');
@@ -64,6 +67,10 @@ function buildCards() {
     label.className = 'partner-name';
     label.textContent = p.name;
     card.appendChild(label);
+
+    card.addEventListener('click', () => {
+      window.location.href = `/book-space.html?open=${encodeURIComponent(p.id)}`;
+    });
 
     track.appendChild(card);
   });
@@ -143,9 +150,10 @@ async function loadData() {
     ]);
 
     if (spacesRes.ok) {
-      const data = await spacesRes.json() as { spaces: { name: string; emoji?: string; thumbColor?: string }[] };
+      const data = await spacesRes.json() as { spaces: { _id: string; name: string; emoji?: string; thumbColor?: string }[] };
       if (data.spaces?.length) {
         currentPartners = data.spaces.map((s) => ({
+          id: s._id,
           name: s.name,
           initials: s.emoji || s.name.substring(0, 3).toUpperCase(),
           color: s.thumbColor || '#0CBFBF',

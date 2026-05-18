@@ -51,7 +51,7 @@ function renderCards(spaces, lang) {
   }
 
   grid.innerHTML = spaces.map(space => `
-    <div class="space-card">
+    <div class="space-card" data-id="${space._id}">
       <div class="space-thumb" style="background:${space.thumbColor};">${space.emoji}</div>
       <div class="space-body">
         <div class="space-name">${space.name}</div>
@@ -62,6 +62,16 @@ function renderCards(spaces, lang) {
       </div>
     </div>
   `).join('');
+}
+
+function highlightFromURL() {
+  const id = new URLSearchParams(location.search).get('open');
+  if (!id) return;
+  const card = document.querySelector(`.space-card[data-id="${id}"]`);
+  if (!card) return;
+  card.classList.add('highlighted');
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => card.classList.remove('highlighted'), 3000);
 }
 
 let allSpaces = [];
@@ -80,6 +90,7 @@ async function loadSpaces(type = '') {
     const data = await res.json();
     allSpaces = data.spaces ?? [];
     renderCards(allSpaces, getLang());
+    highlightFromURL();
   } catch {
     if (grid) {
       const errText = getLang() === 'ko' ? '공간 목록을 불러오지 못했습니다.' : 'Failed to load spaces.';
@@ -88,7 +99,6 @@ async function loadSpaces(type = '') {
   }
 }
 
-// Filter buttons use data-filter-type to avoid depending on display text
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -97,7 +107,6 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
-// Re-render in new language without re-fetching
 document.addEventListener('langchange', e => {
   renderCards(allSpaces, e.detail);
 });
