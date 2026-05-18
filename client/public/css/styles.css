@@ -61,7 +61,7 @@ label {
   font-weight: 500;
 }
 
-input {
+input, textarea, select {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -73,11 +73,11 @@ input {
   outline: none;
 }
 
-input:focus {
+input:focus, textarea:focus, select:focus {
   border-color: var(--accent);
 }
 
-input::placeholder { color: var(--muted); }
+input::placeholder, textarea::placeholder { color: var(--muted); }
 
 .btn-primary, .btn-secondary {
   width: 100%;

@@ -90,55 +90,26 @@
         </div>
         <div class="db-stats">
           <div class="db-stat">
-            <span class="db-num teal">124</span>
+            <span class="db-num teal" id="dbStatSpaces">—</span>
             <span class="db-label" data-i18n="db.stat.spaces">Spaces</span>
           </div>
           <div class="db-stat">
-            <span class="db-num teal">48</span>
-            <span class="db-label" data-i18n="db.stat.venues">Venues</span>
+            <span class="db-num teal" id="dbStatConfirmed">—</span>
+            <span class="db-label" data-i18n="db.stat.venues">Confirmed</span>
           </div>
           <div class="db-stat">
-            <span class="db-num teal">1.2k</span>
-            <span class="db-label" data-i18n="db.stat.bookings">Bookings</span>
+            <span class="db-num teal" id="dbStatRequested">—</span>
+            <span class="db-label" data-i18n="db.stat.bookings">Requested</span>
           </div>
           <div class="db-stat">
-            <span class="db-num teal">12</span>
+            <span class="db-num teal" id="dbStatCities">—</span>
             <span class="db-label" data-i18n="db.stat.cities">Cities</span>
           </div>
         </div>
         <div class="db-section-label" data-i18n="db.recent">Recent Bookings</div>
-        <div class="db-list">
-          <div class="db-item">
-            <span class="db-badge badge-teal">HALL</span>
-            <span class="db-name">Black Box Theatre</span>
-            <span class="db-city">Seoul</span>
-          </div>
-          <div class="db-item">
-            <span class="db-badge badge-purple">GALL</span>
-            <span class="db-name">Gallery White</span>
-            <span class="db-city">Busan</span>
-          </div>
-          <div class="db-item">
-            <span class="db-badge badge-orange">STUD</span>
-            <span class="db-name">Studio A — Hongdae</span>
-            <span class="db-city">Seoul</span>
-          </div>
-          <div class="db-item">
-            <span class="db-badge badge-pink">DANC</span>
-            <span class="db-name">Dance Studio B</span>
-            <span class="db-city">Daegu</span>
-          </div>
-        </div>
+        <div class="db-list" id="dbRecentList"></div>
         <div class="db-section-label" data-i18n="db.monthly">Monthly Bookings</div>
-        <div class="db-chart">
-          <div class="db-bar-wrap"><div class="db-bar" style="height:55%"></div><span>Jan</span></div>
-          <div class="db-bar-wrap"><div class="db-bar" style="height:70%"></div><span>Feb</span></div>
-          <div class="db-bar-wrap"><div class="db-bar" style="height:48%"></div><span>Mar</span></div>
-          <div class="db-bar-wrap"><div class="db-bar" style="height:85%"></div><span>Apr</span></div>
-          <div class="db-bar-wrap"><div class="db-bar" style="height:62%"></div><span>May</span></div>
-          <div class="db-bar-wrap"><div class="db-bar" style="height:78%"></div><span>Jun</span></div>
-          <div class="db-bar-wrap"><div class="db-bar highlight" style="height:92%"></div><span>Jul</span></div>
-        </div>
+        <div class="db-chart" id="dbChart"></div>
       </div>
     </div>
   </section>
@@ -158,17 +129,17 @@
   <!-- ── STATS BAR ───────────────────────────────────────── -->
   <section class="stats">
     <div class="stat-item">
-      <span class="stat-num">124</span>
+      <span class="stat-num" id="statSpaces">0</span>
       <span class="stat-label" data-i18n="stat.spaces">Spaces Listed</span>
     </div>
     <div class="stat-divider"></div>
     <div class="stat-item">
-      <span class="stat-num">48</span>
+      <span class="stat-num" id="statVenues">0</span>
       <span class="stat-label" data-i18n="stat.venues">Partner Venues</span>
     </div>
     <div class="stat-divider"></div>
     <div class="stat-item">
-      <span class="stat-num">1,200+</span>
+      <span class="stat-num" id="statBookings">0</span>
       <span class="stat-label" data-i18n="stat.bookings">Bookings Made</span>
     </div>
   </section>

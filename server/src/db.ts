@@ -23,6 +23,17 @@ const unifiedDb = new Datastore({
 export const spacesDb  = unifiedDb;
 export const bookingsDb = unifiedDb;
 
+export const appEventsDb = new Datastore({
+  filename: path.join(dbPath, 'app_event.db'),
+  autoload: true,
+});
+
+export function recordEvent(eventType: string, payload?: Record<string, unknown>): void {
+  appEventsDb.insertAsync({ eventType, payload: payload ?? null, createdAt: new Date() }).catch(err => {
+    console.error('Failed to record app event:', err);
+  });
+}
+
 // unavailable format: { "YYYY-MM-DD": number[] }
 // Keys are ISO date strings; values are arrays of blocked hours (0–23, integers).
 // Example: { "2026-05-20": [9, 10, 14, 15] }
@@ -193,6 +204,11 @@ export async function seedSpacesIfEmpty(): Promise<void> {
   await spacesDb.updateAsync(
     { _type: 'space', contactEmail: { $exists: false } },
     { $set: { contactEmail: '', contactPhone: '' } },
+    { multi: true }
+  );
+  await spacesDb.updateAsync(
+    { _type: 'space', description: { $exists: false } },
+    { $set: { description: '' } },
     { multi: true }
   );
 

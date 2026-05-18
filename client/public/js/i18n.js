@@ -30,8 +30,8 @@ const translations = {
     // index — dashboard mock
     'db.title': 'ArtSpace (아지트) — Bookings',
     'db.stat.spaces': 'Spaces',
-    'db.stat.venues': 'Venues',
-    'db.stat.bookings': 'Bookings',
+    'db.stat.venues': 'Confirmed',
+    'db.stat.bookings': 'Requested',
     'db.stat.cities': 'Cities',
     'db.recent': 'Recent Bookings',
     'db.monthly': 'Monthly Bookings',
@@ -39,8 +39,8 @@ const translations = {
     // index — partners & stats
     'partners.title': 'Spaces Listed on ArtSpace (아지트)',
     'stat.spaces': 'Spaces Listed',
-    'stat.venues': 'Partner Venues',
-    'stat.bookings': 'Bookings Made',
+    'stat.venues': 'Bookings Confirmed',
+    'stat.bookings': 'Booking Requested',
 
     // index — footer
     'footer': '© 2025 ArtSpace (아지트). All rights reserved.',
@@ -250,6 +250,8 @@ const translations = {
     'admin.form.cancel': 'Cancel',
     'admin.form.name': 'Name *',
     'admin.form.name.ph': 'e.g. Black Box Theatre',
+    'admin.form.desc': 'Short Description',
+    'admin.form.desc.ph': 'e.g. Intimate black box theatre in the heart of Mapo-gu',
     'admin.form.types': 'Types * (select at least one)',
     'admin.form.capacity': 'Capacity *',
     'admin.form.capacity.ph': 'e.g. 120',
@@ -338,8 +340,8 @@ const translations = {
     // index — dashboard mock
     'db.title': 'ArtSpace (아지트) — 예약 현황',
     'db.stat.spaces': '공간',
-    'db.stat.venues': '공연장',
-    'db.stat.bookings': '예약',
+    'db.stat.venues': '예약 확정',
+    'db.stat.bookings': '예약 요청',
     'db.stat.cities': '도시',
     'db.recent': '최근 예약',
     'db.monthly': '월별 예약',
@@ -347,8 +349,8 @@ const translations = {
     // index — partners & stats
     'partners.title': 'ArtSpace (아지트) 등록 공간',
     'stat.spaces': '등록된 공간',
-    'stat.venues': '파트너 공연장',
-    'stat.bookings': '총 예약 건수',
+    'stat.venues': '예약 확정',
+    'stat.bookings': '예약 요청',
 
     // index — footer
     'footer': '© 2025 ArtSpace (아지트). 모든 권리 보유.',
@@ -558,6 +560,8 @@ const translations = {
     'admin.form.cancel': '취소',
     'admin.form.name': '이름 *',
     'admin.form.name.ph': '예: 블랙박스 극장',
+    'admin.form.desc': '짧은 설명',
+    'admin.form.desc.ph': '예: 마포구 중심에 위치한 아늑한 블랙박스 극장',
     'admin.form.types': '유형 * (하나 이상 선택)',
     'admin.form.capacity': '수용 인원 *',
     'admin.form.capacity.ph': '예: 120',

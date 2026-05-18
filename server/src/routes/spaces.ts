@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { spacesDb } from '../db';
+import { spacesDb, recordEvent } from '../db';
 import { requireAuth } from '../middleware/auth';
 
 const router = Router();
@@ -27,9 +27,10 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 
 router.post('/', requireAuth, async (req: Request, res: Response) => {
-  const { name, types, capacity, locationEn, locationKo, hourlyRate, emoji, thumbColor, unavailable, contactEmail, contactPhone } =
+  const { name, description, types, capacity, locationEn, locationKo, hourlyRate, emoji, thumbColor, unavailable, contactEmail, contactPhone } =
     req.body as {
       name?: string;
+      description?: string;
       types?: string[];
       capacity?: number;
       locationEn?: string;
@@ -57,6 +58,7 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
     const space = await spacesDb.insertAsync({
       _type: 'space',
       name: name.trim(),
+      description: description?.trim().slice(0, 100) ?? '',
       types,
       capacity: Number(capacity),
       locationEn: locationEn.trim(),
@@ -69,6 +71,7 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
       contactPhone: contactPhone?.trim() ?? '',
       createdAt: new Date(),
     });
+    recordEvent('space_created', { spaceId: space._id as string, name: (space as { name: string }).name });
     res.status(201).json({ space });
   } catch {
     res.status(500).json({ error: 'Failed to create space' });
@@ -77,9 +80,10 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
 
 router.put('/:id', requireAuth, async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, types, capacity, locationEn, locationKo, hourlyRate, emoji, thumbColor, unavailable, contactEmail, contactPhone } =
+  const { name, description, types, capacity, locationEn, locationKo, hourlyRate, emoji, thumbColor, contactEmail, contactPhone } =
     req.body as {
       name?: string;
+      description?: string;
       types?: string[];
       capacity?: number;
       locationEn?: string;
@@ -87,7 +91,6 @@ router.put('/:id', requireAuth, async (req: Request, res: Response) => {
       hourlyRate?: number;
       emoji?: string;
       thumbColor?: string;
-      unavailable?: Record<string, number[]>;
       contactEmail?: string;
       contactPhone?: string;
     };
@@ -109,6 +112,7 @@ router.put('/:id', requireAuth, async (req: Request, res: Response) => {
       {
         $set: {
           name: name.trim(),
+          description: description?.trim().slice(0, 100) ?? '',
           types,
           capacity: Number(capacity),
           locationEn: locationEn.trim(),
@@ -116,7 +120,6 @@ router.put('/:id', requireAuth, async (req: Request, res: Response) => {
           hourlyRate: Number(hourlyRate),
           emoji: emoji?.trim() || '🏢',
           thumbColor: thumbColor?.trim() || '#E6FAF9',
-          unavailable: unavailable ?? {},
           contactEmail: contactEmail?.trim() ?? '',
           contactPhone: contactPhone?.trim() ?? '',
         },
@@ -133,6 +136,25 @@ router.put('/:id', requireAuth, async (req: Request, res: Response) => {
   }
 });
 
+router.patch('/:id/unavailability', requireAuth, async (req: Request, res: Response) => {
+  const { unavailable } = req.body as { unavailable?: Record<string, number[]> };
+  if (!unavailable || typeof unavailable !== 'object') {
+    res.status(400).json({ error: 'Invalid unavailable data' });
+    return;
+  }
+  try {
+    const numAffected = await spacesDb.updateAsync(
+      { _id: req.params.id, _type: 'space' },
+      { $set: { unavailable } },
+      {}
+    );
+    if (!numAffected) { res.status(404).json({ error: 'Space not found' }); return; }
+    res.json({ success: true });
+  } catch {
+    res.status(500).json({ error: 'Failed to update unavailability' });
+  }
+});
+
 router.delete('/:id', requireAuth, async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -141,6 +163,7 @@ router.delete('/:id', requireAuth, async (req: Request, res: Response) => {
       res.status(404).json({ error: 'Space not found' });
       return;
     }
+    recordEvent('space_deleted', { spaceId: id });
     res.json({ success: true });
   } catch {
     res.status(500).json({ error: 'Failed to delete space' });

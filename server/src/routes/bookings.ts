@@ -1,9 +1,43 @@
 import { Router, Request, Response } from 'express';
-import { spacesDb, bookingsDb } from '../db';
+import { spacesDb, bookingsDb, recordEvent } from '../db';
 import { sendBookingRequestEmail } from '../utils/email';
 import { requireAuth } from '../middleware/auth';
 
 const router = Router();
+
+// Public: returns the 4 most recently requested spaces (no personal info).
+router.get('/recent-public', async (_req: Request, res: Response) => {
+  try {
+    const recent = await bookingsDb
+      .find({ _type: 'booking' })
+      .sort({ createdAt: -1 })
+      .limit(40)
+      .execAsync() as unknown as { spaceId: string; spaceName: string }[];
+
+    // Deduplicate — show each space only once, keep max 10
+    const seen = new Set<string>();
+    const deduped = recent.filter(b => {
+      if (seen.has(b.spaceId)) return false;
+      seen.add(b.spaceId);
+      return true;
+    }).slice(0, 10);
+
+    const enriched = await Promise.all(deduped.map(async b => {
+      const space = await spacesDb.findOneAsync({ _id: b.spaceId, _type: 'space' }) as {
+        types?: string[]; locationEn?: string;
+      } | null;
+      return {
+        spaceName: b.spaceName,
+        spaceTypes: space?.types ?? [],
+        city: space?.locationEn?.split(',').pop()?.trim() ?? '',
+      };
+    }));
+
+    res.json({ bookings: enriched });
+  } catch {
+    res.status(500).json({ error: 'Failed to fetch recent bookings' });
+  }
+});
 
 // Public: returns only { date → hours[] } for pending bookings on a space.
 // No personal info exposed.
@@ -46,6 +80,7 @@ router.post('/:id/confirm', requireAuth, async (req: Request, res: Response) => 
     if (!booking) { res.status(404).json({ error: 'Booking not found' }); return; }
 
     await bookingsDb.updateAsync({ _id: req.params.id }, { $set: { status: 'approved' } }, {});
+    recordEvent('booking_confirmed', { bookingId: req.params.id });
 
     const space = await spacesDb.findOneAsync({ _id: booking.spaceId, _type: 'space' }) as {
       _id: string; unavailable: Record<string, number[]>;
@@ -68,6 +103,7 @@ router.post('/:id/decline', requireAuth, async (req: Request, res: Response) => 
     const booking = await bookingsDb.findOneAsync({ _id: req.params.id, _type: 'booking' });
     if (!booking) { res.status(404).json({ error: 'Booking not found' }); return; }
     await bookingsDb.updateAsync({ _id: req.params.id }, { $set: { status: 'declined' } }, {});
+    recordEvent('booking_declined', { bookingId: req.params.id });
     res.json({ success: true });
   } catch {
     res.status(500).json({ error: 'Failed to decline booking' });
@@ -108,6 +144,8 @@ router.post('/', async (req: Request, res: Response) => {
       status: 'pending',
       createdAt: new Date(),
     });
+
+    recordEvent('booking_request', { bookingId: booking._id as string, spaceId, date, hourCount: hours.length });
 
     if (space.contactEmail) {
       sendBookingRequestEmail(space.contactEmail, {

@@ -38,6 +38,8 @@
     .tags-cell { display: flex; flex-wrap: wrap; gap: 0.3rem; }
     .cell-rate { font-weight: 600; color: var(--teal-dark); white-space: nowrap; }
     .cell-actions { display: flex; gap: 0.5rem; white-space: nowrap; }
+    .btn-space-name { background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; font-size: inherit; font-weight: 600; color: var(--teal-dark); text-decoration: underline; text-underline-offset: 3px; text-align: left; transition: color 0.15s; }
+    .btn-space-name:hover { color: var(--teal); }
     .btn-edit, .btn-del { padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.78rem; font-weight: 700; border: 1.5px solid; cursor: pointer; transition: background 0.15s, color 0.15s; font-family: inherit; }
     .btn-edit { border-color: var(--teal); color: var(--teal-dark); background: transparent; }
     .btn-edit:hover { background: var(--teal); color: #fff; }
@@ -55,8 +57,8 @@
     .form-grid .full { grid-column: 1 / -1; }
     .form-field { display: flex; flex-direction: column; gap: 0.35rem; }
     .form-field label { font-size: 0.8rem; font-weight: 600; color: var(--mid); }
-    .form-field input, .form-field select { border: 1.5px solid var(--border); border-radius: 8px; padding: 0.55rem 0.75rem; font-size: 0.88rem; font-family: inherit; color: var(--dark); background: #fff; outline: none; transition: border-color 0.15s; }
-    .form-field input:focus, .form-field select:focus { border-color: var(--teal); }
+    .form-field input, .form-field select, .form-field textarea { border: 1.5px solid var(--border); border-radius: 8px; padding: 0.55rem 0.75rem; font-size: 0.88rem; font-family: inherit; color: var(--dark); background: #fff; outline: none; transition: border-color 0.15s; }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--teal); }
     .types-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.1rem; }
     .type-check { display: flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.7rem; border: 1.5px solid var(--border); border-radius: 50px; cursor: pointer; transition: border-color 0.15s, background 0.15s; user-select: none; }
     .type-check input[type="checkbox"] { display: none; }
@@ -224,6 +226,82 @@
         </div>
       </div>
 
+      <!-- Bookings panel (opened by clicking a space name) -->
+      <div class="form-panel hidden" id="bookingsPanel">
+        <div class="form-panel-header">
+          <span class="form-panel-title" id="bookingsPanelTitle"></span>
+          <button class="btn-cancel" id="closeBookingsBtn" data-i18n="admin.form.cancel">Close</button>
+        </div>
+        <div class="cal-compact">
+          <div class="admin-cal-header">
+            <span class="admin-cal-title" data-i18n="admin.cal.title">Availability Calendar</span>
+            <div class="admin-cal-nav">
+              <button type="button" class="btn-nav-sm" id="adminCalPrev">&#8592;</button>
+              <span class="admin-cal-week-label" id="adminCalLabel"></span>
+              <button type="button" class="btn-nav-sm" id="adminCalNext">&#8594;</button>
+              <button type="button" class="btn-nav-sm today" id="adminCalToday" data-i18n="admin.cal.today">Today</button>
+            </div>
+          </div>
+          <div class="cal-legend">
+            <div class="legend-item"><div class="legend-dot blocked"></div> <span data-i18n="legend.blocked">Unavailable</span></div>
+            <div class="legend-item"><div class="legend-dot pending"></div> <span data-i18n="legend.pending">Pending request</span></div>
+          </div>
+          <div class="cal-wrap">
+            <div class="cal-grid" id="adminCalGrid"></div>
+          </div>
+
+          <!-- Unavailability management -->
+          <div class="admin-requests-header" style="margin-top:0.75rem;">
+            <span class="admin-cal-title" data-i18n="admin.form.unavail">Unavailability</span>
+            <span class="table-meta-count" id="unavailSaveStatus"></span>
+          </div>
+          <div class="unavail-section">
+            <div class="unavail-list" id="unavailList">
+              <span class="unavail-empty" data-i18n="admin.unavail.empty">No blocked times yet.</span>
+            </div>
+            <div class="unavail-add">
+              <div class="unavail-add-top">
+                <label for="unavailDate" data-i18n="admin.unavail.date">Date</label>
+                <input id="unavailDate" type="date" class="unavail-date-input" />
+              </div>
+              <div>
+                <div class="unavail-hours-label" data-i18n="admin.unavail.hours">Hours to block</div>
+                <div class="unavail-hours-controls">
+                  <select id="hoursSelect" class="hours-select" multiple size="7">
+                    <option value="9">09:00</option>
+                    <option value="10">10:00</option>
+                    <option value="11">11:00</option>
+                    <option value="12">12:00</option>
+                    <option value="13">13:00</option>
+                    <option value="14">14:00</option>
+                    <option value="15">15:00</option>
+                    <option value="16">16:00</option>
+                    <option value="17">17:00</option>
+                    <option value="18">18:00</option>
+                    <option value="19">19:00</option>
+                    <option value="20">20:00</option>
+                    <option value="21">21:00</option>
+                    <option value="22">22:00</option>
+                  </select>
+                  <label class="allday-check">
+                    <input type="checkbox" id="blockAllDay" />
+                    <span data-i18n="admin.unavail.allday">Block all day</span>
+                  </label>
+                </div>
+              </div>
+              <button type="button" class="btn-block" id="addUnavailBtn" data-i18n="admin.unavail.add">+ Block Hours</button>
+            </div>
+          </div>
+          <hr class="form-section-divider" />
+
+          <div class="admin-requests-header">
+            <span class="admin-cal-title" data-i18n="admin.req.title">Booking Requests</span>
+            <span class="table-meta-count" id="pendingCount"></span>
+          </div>
+          <div id="pendingRequestsList"></div>
+        </div>
+      </div>
+
       <!-- Create / Edit form -->
       <div class="form-panel hidden" id="formPanel">
         <div class="form-panel-header">
@@ -326,47 +404,14 @@
               </div>
             </div>
 
-            <div class="form-field full">
-              <label data-i18n="admin.form.unavail">Unavailability</label>
-              <div class="unavail-section">
-                <div class="unavail-list" id="unavailList">
-                  <span class="unavail-empty" data-i18n="admin.unavail.empty">No blocked times yet.</span>
-                </div>
-                <div class="unavail-add">
-                  <div class="unavail-add-top">
-                    <label for="unavailDate" data-i18n="admin.unavail.date">Date</label>
-                    <input id="unavailDate" type="date" class="unavail-date-input" />
-                  </div>
-                  <div>
-                    <div class="unavail-hours-label" data-i18n="admin.unavail.hours">Hours to block</div>
-                    <div class="unavail-hours-controls">
-                      <select id="hoursSelect" class="hours-select" multiple size="7">
-                        <option value="9">09:00</option>
-                        <option value="10">10:00</option>
-                        <option value="11">11:00</option>
-                        <option value="12">12:00</option>
-                        <option value="13">13:00</option>
-                        <option value="14">14:00</option>
-                        <option value="15">15:00</option>
-                        <option value="16">16:00</option>
-                        <option value="17">17:00</option>
-                        <option value="18">18:00</option>
-                        <option value="19">19:00</option>
-                        <option value="20">20:00</option>
-                        <option value="21">21:00</option>
-                        <option value="22">22:00</option>
-                      </select>
-                      <label class="allday-check">
-                        <input type="checkbox" id="blockAllDay" />
-                        <span data-i18n="admin.unavail.allday">Block all day</span>
-                      </label>
-                    </div>
-                  </div>
-                  <button type="button" class="btn-block" id="addUnavailBtn" data-i18n="admin.unavail.add">+ Block Hours</button>
-                </div>
-              </div>
-            </div>
+          </div>
 
+          <div class="form-field full" style="margin-top:0.25rem;">
+            <label for="f-desc" data-i18n="admin.form.desc">Short Description</label>
+            <div style="position:relative;">
+              <textarea id="f-desc" maxlength="100" rows="2" data-i18n-placeholder="admin.form.desc.ph" placeholder="e.g. Intimate black box theatre in the heart of Mapo-gu" style="width:100%;resize:vertical;min-height:3.2rem;padding-bottom:1.4rem;box-sizing:border-box;"></textarea>
+              <span id="descCount" style="position:absolute;right:0.75rem;bottom:0.45rem;font-size:0.72rem;color:var(--muted);pointer-events:none;">0/100</span>
+            </div>
           </div>
 
           <div id="formError" class="form-error hidden"></div>
@@ -376,34 +421,6 @@
             <button type="button" class="btn-cancel" id="cancelBtn2" data-i18n="admin.form.cancel">Cancel</button>
           </div>
         </form>
-
-        <!-- Calendar preview + booking requests (edit mode only) -->
-        <div id="adminCalSection" class="hidden cal-compact">
-          <hr class="form-section-divider" />
-
-          <div class="admin-cal-header">
-            <span class="admin-cal-title" data-i18n="admin.cal.title">Availability Calendar</span>
-            <div class="admin-cal-nav">
-              <button type="button" class="btn-nav-sm" id="adminCalPrev">&#8592;</button>
-              <span class="admin-cal-week-label" id="adminCalLabel"></span>
-              <button type="button" class="btn-nav-sm" id="adminCalNext">&#8594;</button>
-              <button type="button" class="btn-nav-sm today" id="adminCalToday" data-i18n="admin.cal.today">Today</button>
-            </div>
-          </div>
-          <div class="cal-legend">
-            <div class="legend-item"><div class="legend-dot blocked"></div> <span data-i18n="legend.blocked">Unavailable</span></div>
-            <div class="legend-item"><div class="legend-dot pending"></div> <span data-i18n="legend.pending">Pending request</span></div>
-          </div>
-          <div class="cal-wrap">
-            <div class="cal-grid" id="adminCalGrid"></div>
-          </div>
-
-          <div class="admin-requests-header">
-            <span class="admin-cal-title" data-i18n="admin.req.title">Booking Requests</span>
-            <span class="table-meta-count" id="pendingCount"></span>
-          </div>
-          <div id="pendingRequestsList"></div>
-        </div>
 
       </div>
 
